@@ -19,7 +19,7 @@ export const BasicInfoForm = ({ chains }: BasicInfoFormProps) => {
   const { name, description, prompt, chainId, riskLevel } = watch();
   const isValid = Boolean(name && description && prompt && chainId && riskLevel);
 
-  const handleNetworkChange = async (newChainName: string) => {
+  const handleNetworkChange = (newChainName: string) => {
     const newChainId = chains.find((chain) => chain.name === newChainName)?.chainId;
     if (!newChainId) return;
     setValue("chainId", newChainId);
@@ -71,7 +71,7 @@ export const BasicInfoForm = ({ chains }: BasicInfoFormProps) => {
           <Dropdown
             {...register("riskLevel", { required: "Risk level is required." })}
             options={riskLevelOptions}
-            onSelect={(value) => setValue("riskLevel", value)}
+            onSelect={(value) => setValue("riskLevel", Number(value))}
             error={errors.riskLevel?.message as string}
           />
         </div>

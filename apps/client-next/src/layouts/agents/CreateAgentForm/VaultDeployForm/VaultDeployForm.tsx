@@ -3,7 +3,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { Address } from "viem";
-import { useAccount, usePublicClient, useWriteContract } from "wagmi";
+import { useAccount, usePublicClient, useReadContract, useWriteContract } from "wagmi";
+import { NATIVE_CURRENCY_SYMBOLS, VAULT_FACTORY_ADDRESSES } from "@libs/constants";
 import type { ChainsResponse } from "@libs/graphql";
 import type { CreateAgentInput } from "@libs/model";
 import { Button, Textfield } from "@libs/ui";
@@ -39,6 +40,14 @@ export const VaultDeployForm = ({ chains, onBack }: VaultDeployFormProps) => {
   } = useFormContext<CreateAgentInput>();
   const { accountAddress, vaultAddress, tokenAddress, chainId } = watch();
 
+  const vaultFactoryAddress = VAULT_FACTORY_ADDRESSES[Number(chainId)];
+
+  const { data: agentInitialFund } = useReadContract({
+    address: vaultFactoryAddress,
+    abi: AgentVaultFactory__factory.abi,
+    functionName: "agentInitialFund",
+  }) as { data: bigint | undefined };
+
   /* Inputs */
   const [vaultName, setVaultName] = useState("");
   const [deployState, setDeployState] = useState<DeployState>("default");
@@ -57,10 +66,10 @@ export const VaultDeployForm = ({ chains, onBack }: VaultDeployFormProps) => {
     !publicClient;
 
   const handleDeploy = async () => {
-    if (isDeployDisabled) return;
+    if (isDeployDisabled || !agentInitialFund) return;
     try {
       const hash = await writeContractAsync({
-        address: process.env.NEXT_PUBLIC_VAULT_FACTORY_ADDRESS as Address,
+        address: vaultFactoryAddress,
         abi: AgentVaultFactory__factory.abi,
         functionName: "createVault",
         args: [
@@ -71,18 +80,22 @@ export const VaultDeployForm = ({ chains, onBack }: VaultDeployFormProps) => {
           vaultName,
           vaultName.trim().toUpperCase(),
         ],
+        value: agentInitialFund,
       });
+      console.log(hash);
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       const eventArgs = getEventArgsFromReceipt(
         receipt,
         AgentVaultFactory__factory.abi.find((abi) => abi.name === "VaultCreated") as unknown as EventFragment,
       ) as { vault: Address };
+      console.log(eventArgs);
 
       setValue("vaultAddress", eventArgs.vault);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(vaultAddress);
 
   useEffect(() => {
     if (isPending) {
@@ -108,6 +121,26 @@ export const VaultDeployForm = ({ chains, onBack }: VaultDeployFormProps) => {
             To create an agent, you need to deploy a Vault smart contract.
             <br /> After deployment, anyone can deposit tokens into the vault and earn rewards.
           </p>
+          {agentInitialFund === undefined ? (
+            <div className="mt-2 rounded-lg bg-gray-50 p-3">
+              <div className="animate-pulse space-y-2">
+                <div className="h-4 w-3/4 rounded bg-gray-200" />
+                <div className="h-3 w-full rounded bg-gray-200" />
+              </div>
+            </div>
+          ) : (
+            <div className="mt-2 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+              <p className="text-14/body text-gray-700">
+                Required initial fund:{" "}
+                <span className="font-semibold text-primary-600">
+                  {Number(agentInitialFund) / 1e18} {NATIVE_CURRENCY_SYMBOLS[Number(chainId)]}
+                </span>
+              </p>
+              <p className="mt-2 text-12/body text-gray-500">
+                This amount will be transferred to the agent address as initial operating funds.
+              </p>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-4">
           <Textfield
