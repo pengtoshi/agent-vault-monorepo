@@ -1,17 +1,24 @@
+import { ApolloProvider } from "@apollo/client";
 import type { AppProps } from "next/app";
-import Head from "next/head";
+import { useGraphqlClient } from "@libs/graphql";
+import { AuthWrapper } from "~/client-next/src/components/LoginSheet/AuthWrapper";
+import { AuthProvider } from "~/client-next/src/contexts/AuthProvider";
+import { WalletProvider } from "~/client-next/src/contexts/WalletProvider";
 import "../../public/globals-client.css";
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps: { sessions, ...pageProps } }: AppProps) => {
+  const client = useGraphqlClient();
+
   return (
-    <>
-      <Head>
-        <title>Welcome to apps/client-next!</title>
-      </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
-    </>
+    <WalletProvider>
+      <AuthProvider>
+        <AuthWrapper>
+          <ApolloProvider client={client}>
+            <Component {...pageProps} />
+          </ApolloProvider>
+        </AuthWrapper>
+      </AuthProvider>
+    </WalletProvider>
   );
 };
 

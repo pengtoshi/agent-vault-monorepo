@@ -14,6 +14,7 @@ import type { RedisConfig } from "@libs/nestjs-core";
 import { AgentModule } from "./agent/agent.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
+import { ChainModule } from "./chain/chain.module";
 import { MarketModule } from "./market/market.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
@@ -87,6 +88,7 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
     TokenModule,
     UserModule,
     AgentModule,
+    ChainModule,
     MarketModule,
     BlockchainModule,
   ],

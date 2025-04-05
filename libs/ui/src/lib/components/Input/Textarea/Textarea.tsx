@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { forwardRef, useEffect, useId, useState } from "react";
 import type { UIProps } from "../../../props";
+import { Label } from "../../Display/Label/Label";
 
 export interface TextareaProps extends UIProps.TextArea {
   id?: string;
@@ -56,6 +57,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
 
   return (
     <div className={clsx("flex w-full flex-col items-start gap-1.5", className)}>
+      {label && <Label htmlFor={localId} label={label} required={required} />}
       <div className={clsx(fieldCommon, fieldColor, disabled && "!bg-gray-200")}>
         <textarea
           id={inputId}

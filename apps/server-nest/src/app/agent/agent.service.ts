@@ -4,7 +4,7 @@ import { viem } from "@goat-sdk/wallet-viem";
 import { InjectRedis } from "@liaoliaots/nestjs-redis";
 import { InjectQueue } from "@nestjs/bullmq";
 import { Injectable, Logger } from "@nestjs/common";
-import { Cron, CronExpression } from "@nestjs/schedule";
+// import { Cron, CronExpression } from "@nestjs/schedule";
 import { generateText } from "ai";
 import { Queue } from "bullmq";
 import Redis from "ioredis";
@@ -119,7 +119,7 @@ export class AgentService {
     return true;
   }
 
-  async getAgent(agentId: string) {
+  async findAgentById(agentId: string) {
     return this.prisma.extended.agent.findUnique({ where: { id: agentId } });
   }
 
@@ -130,5 +130,10 @@ export class AgentService {
   async resolveMessages(agentId: string) {
     if (!agentId) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT);
     return this.prisma.extended.message.findMany({ where: { agentId } });
+  }
+
+  async resolveChain(chainId: number) {
+    if (!chainId) throw new Error(ErrorMessage.MSG_NOT_FOUND_CHAIN);
+    return this.prisma.extended.chain.findUnique({ where: { chainId } });
   }
 }

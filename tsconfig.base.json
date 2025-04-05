@@ -20,6 +20,7 @@
     "paths": {
       "@libs/constants": ["libs/constants/src/index.ts"],
       "@libs/model": ["libs/model/src/index.ts"],
+      "@libs/graphql": ["libs/graphql/client/src/index.ts"],
       "@libs/nestjs-core": ["libs/nestjs-core/src/index.ts"],
       "@libs/ui": ["libs/ui/src/index.ts"],
       "@libs/utils-client": ["libs/utils/src/client/index.ts"],

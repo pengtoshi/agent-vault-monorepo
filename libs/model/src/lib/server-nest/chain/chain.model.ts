@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType({ description: "Chain Model" })
-export class Chain {
+export class ChainInfo {
   @Field(() => String, { nullable: false, description: "Chain ID" })
   chainId!: string;
 

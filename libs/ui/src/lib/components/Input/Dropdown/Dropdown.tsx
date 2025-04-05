@@ -57,7 +57,7 @@ export const Dropdown = <T extends string | number>({
         <button
           type="button"
           className={clsx(
-            "group relative flex h-10 w-full items-center justify-between gap-2 rounded-md border border-gray-300 bg-white px-4 focus:border-primary-500",
+            "group relative flex h-10 w-full items-center justify-between gap-2 rounded-md border border-gray-300 bg-gray-50 px-4 focus:border-primary-500",
             selected ? "text-gray-950" : "text-gray-400",
             disabled && "cursor-not-allowed bg-gray-200 text-gray-350",
           )}
@@ -73,7 +73,7 @@ export const Dropdown = <T extends string | number>({
           />
         </button>
         {isOpen && (
-          <ul className="absolute left-0 mt-2 w-full rounded-md border border-gray-300 bg-white p-1 shadow-emphasize">
+          <ul className="absolute left-0 z-50 mt-2 w-full rounded-md border border-gray-300 bg-white p-1 shadow-emphasize">
             {options.map((option, index) => (
               <DropdownListText<T>
                 key={index}

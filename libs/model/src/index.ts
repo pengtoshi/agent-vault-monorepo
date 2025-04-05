@@ -30,8 +30,4 @@ export * from "./lib/server-nest/user/verify-user.input";
 // Agent
 export * from "./lib/server-nest/agent/create-agent.input";
 export * from "./lib/server-nest/agent/agent.model";
-export * from "./lib/server-nest/agent/public-agent.model";
 export * from "./lib/server-nest/agent/message.model";
-
-// Chain
-export * from "./lib/server-nest/chain/chain.model";

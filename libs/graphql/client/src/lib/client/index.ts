@@ -2,6 +2,7 @@ import type { NormalizedCacheObject } from "@apollo/client";
 import { ApolloClient, InMemoryCache, createHttpLink, from, fromPromise } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
+import { useState } from "react";
 import type { AuthToken } from "@libs/model";
 import type { CookieContext } from "@libs/utils-client";
 import { type AuthCookieContext, authCookieKey, getCurrentToken, getNewToken, removeToken, setToken } from "./token";
@@ -114,4 +115,9 @@ export const getApolloClient = (uri?: string, cookieContext?: CookieContext) => 
 
 export const getGraphqlClient = (uri?: string, cookieContext?: CookieContext) => {
   return getApolloClient(uri, cookieContext);
+};
+
+export const useGraphqlClient = (uri?: string, cookieContext?: CookieContext) => {
+  const [client] = useState<ApolloClient<NormalizedCacheObject>>(getApolloClient(uri, cookieContext));
+  return client;
 };

@@ -8,9 +8,6 @@ export class AgentInfo {
   @Field(() => String, { nullable: false, description: "Agent EOA address" })
   address!: string;
 
-  @Field(() => String, { nullable: false, description: "Agent private key" })
-  privateKey!: string;
-
   @Field(() => String, { nullable: false, description: "Agent vault address" })
   vaultAddress!: string;
 

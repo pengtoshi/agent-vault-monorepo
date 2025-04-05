@@ -16,6 +16,8 @@ export interface BottomSheetProps {
   actionsDirection?: "row" | "column";
   closeButton?: boolean;
   closeText?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export const BottomSheet = ({
@@ -27,11 +29,13 @@ export const BottomSheet = ({
   actionsDirection = "row",
   closeButton = true,
   closeText = "Close",
+  open,
+  onOpenChange,
   ...props
 }: BottomSheetProps) => {
   return (
-    <Drawer {...props}>
-      <DrawerTrigger>{trigger}</DrawerTrigger>
+    <Drawer open={open} onOpenChange={onOpenChange} {...props}>
+      {trigger && <DrawerTrigger>{trigger}</DrawerTrigger>}
       <DrawerContent>
         <div className="flex w-full flex-col gap-1">
           {title && <span className="text-16/body/emp text-gray-950">{title}</span>}

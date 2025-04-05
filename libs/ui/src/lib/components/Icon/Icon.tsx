@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { ReactComponent as Agent } from "~/ui/public/icons/agent.svg";
 import { ReactComponent as Check } from "~/ui/public/icons/check.svg";
 import { ReactComponent as CheckThick } from "~/ui/public/icons/check_thick.svg";
 import { ReactComponent as ChevronDown } from "~/ui/public/icons/chevron_down.svg";
@@ -20,8 +21,14 @@ import { ReactComponent as Close } from "~/ui/public/icons/close.svg";
 import { ReactComponent as CloseThick } from "~/ui/public/icons/close_thick.svg";
 import { ReactComponent as Dot } from "~/ui/public/icons/dot.svg";
 import { ReactComponent as Download } from "~/ui/public/icons/download.svg";
+import { ReactComponent as Home } from "~/ui/public/icons/home.svg";
+import { ReactComponent as HomeFilled } from "~/ui/public/icons/home_filled.svg";
+import { ReactComponent as Person } from "~/ui/public/icons/person.svg";
+import { ReactComponent as PersonFilled } from "~/ui/public/icons/person_filled.svg";
+import { ReactComponent as Search } from "~/ui/public/icons/search.svg";
 
 export const IconVariants = {
+  Agent,
   Check,
   CheckThick,
   ChevronDown,
@@ -43,6 +50,11 @@ export const IconVariants = {
   CloseThick,
   Dot,
   Download,
+  Home,
+  HomeFilled,
+  Person,
+  PersonFilled,
+  Search,
 };
 
 type IconName = keyof typeof IconVariants;

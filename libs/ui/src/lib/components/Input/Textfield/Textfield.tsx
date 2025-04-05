@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { forwardRef, useEffect, useId, useState } from "react";
 import type { UIProps } from "../../../props";
+import { Label } from "../../Display/Label/Label";
 
 export interface TextfieldProps extends UIProps.Input {
   id?: string;
@@ -66,6 +67,7 @@ export const Textfield = forwardRef<HTMLInputElement, TextfieldProps>(function T
 
   return (
     <div className={clsx("flex w-full flex-col items-start gap-1.5", className)}>
+      {label && <Label htmlFor={localId} label={label} required={required} />}
       <div className={clsx(fieldCommon, fieldColor, disabled && "!bg-gray-200")}>
         {!!leadingIcon && leadingIcon}
         <input

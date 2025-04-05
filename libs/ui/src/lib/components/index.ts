@@ -1,4 +1,5 @@
 // display
+export * from "./Display/Label/Label";
 // export * from "./Display/Accordion/Accordion";
 export * from "./Display/Interaction/Interaction";
 // export * from "./Display/Tab/Tab";
@@ -13,6 +14,7 @@ export * from "./Icon/Icon";
 
 // input
 export * from "./Input/Button/Button";
+export * from "./Input/Button/IconButton";
 export * from "./Input/Checkbox/Checkbox";
 export * from "./Input/Dropdown/Dropdown";
 // export * from "./Input/Imagefield/Imagefield";

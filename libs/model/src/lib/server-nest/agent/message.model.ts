@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 
 @ObjectType({ description: "Message Model" })
-export class Message {
+export class MessageInfo {
   @Field(() => String, { nullable: false, description: "Message ID" })
   id!: string;
 
