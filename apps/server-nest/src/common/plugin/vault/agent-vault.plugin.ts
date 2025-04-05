@@ -1,9 +1,9 @@
 import { type Chain, PluginBase } from "@goat-sdk/core";
 import type { EVMWalletClient } from "@goat-sdk/wallet-evm";
-import { baseSepolia } from "viem/chains";
+import { VIEM_CHAINS } from "@libs/constants";
 import { AgentVaultService } from "./agent-vault.service";
 
-const SUPPORTED_CHAINS = [baseSepolia];
+const SUPPORTED_CHAINS = Object.values(VIEM_CHAINS);
 
 export class AgentVaultPlugin extends PluginBase<EVMWalletClient> {
   constructor() {

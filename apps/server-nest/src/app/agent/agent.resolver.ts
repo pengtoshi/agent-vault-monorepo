@@ -1,5 +1,5 @@
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { AgentInfo, CreateAgentInput } from "@libs/model";
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
+import { AgentInfo, CreateAgentInput, Message, PublicAgentInfo } from "@libs/model";
 import { AgentService } from "./agent.service";
 
 @Resolver(() => AgentInfo)
@@ -11,13 +11,18 @@ export class AgentResolver {
     return this.agentService.createAgent(agentInput);
   }
 
-  @Query(() => AgentInfo)
+  @Query(() => PublicAgentInfo)
   async getAgent(@Args("id") id: string) {
     return this.agentService.getAgent(id);
   }
 
-  @Query(() => [AgentInfo])
+  @Query(() => [PublicAgentInfo])
   async findAllAgents() {
     return this.agentService.findAllAgents();
+  }
+
+  @ResolveField("messages", () => [Message], { nullable: true })
+  async resolveMessages(@Parent() agentInfo: AgentInfo) {
+    return this.agentService.resolveMessages(agentInfo.id);
   }
 }

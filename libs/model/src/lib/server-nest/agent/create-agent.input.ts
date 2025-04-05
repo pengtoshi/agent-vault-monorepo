@@ -13,6 +13,11 @@ export class CreateAgentInput {
   @IsNotEmpty()
   description!: string;
 
+  @Field(() => String, { nullable: false, description: "Agent vault address" })
+  @IsString()
+  @IsNotEmpty()
+  vaultAddress!: string;
+
   @Field(() => String, { nullable: false, description: "Agent prompt" })
   @IsString()
   @IsNotEmpty()

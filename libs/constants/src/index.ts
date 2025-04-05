@@ -1,3 +1,6 @@
+// Agent
+export * from "./lib/agent";
+
 // Blockchain
 export * from "./lib/blockchain";
 

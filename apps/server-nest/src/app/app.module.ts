@@ -1,11 +1,16 @@
+import { RedisModule } from "@liaoliaots/nestjs-redis";
+import type { RedisModuleOptions } from "@liaoliaots/nestjs-redis";
 import { ApolloDriver } from "@nestjs/apollo";
 import type { ApolloDriverConfig } from "@nestjs/apollo";
 import { HttpModule } from "@nestjs/axios";
+import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TerminusModule } from "@nestjs/terminus";
+import type { QueueOptions } from "bullmq";
 import { GqlConfigService, MonitorModule, PrismaModule, config } from "@libs/nestjs-core";
+import type { RedisConfig } from "@libs/nestjs-core";
 import { AgentModule } from "./agent/agent.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -34,6 +39,40 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       useClass: GqlConfigService,
+    }),
+
+    // Redis & Message Queue
+    RedisModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService): Promise<RedisModuleOptions> => {
+        await ConfigModule.envVariablesLoaded;
+        const redis = configService.get<RedisConfig>("redis")!;
+        return {
+          readyLog: true,
+          config: {
+            host: redis.host,
+            port: redis.port,
+            password: redis.password,
+            connectTimeout: 60000,
+          },
+        };
+      },
+    }),
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService): Promise<QueueOptions> => {
+        await ConfigModule.envVariablesLoaded;
+        const redis = configService.get<RedisConfig>("redis")!;
+        return {
+          prefix: "queue:",
+          connection: {
+            host: redis.host,
+            port: redis.port,
+            password: redis.password,
+            connectTimeout: 60000,
+          },
+        };
+      },
     }),
 
     // Utils

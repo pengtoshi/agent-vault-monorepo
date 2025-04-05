@@ -24,12 +24,15 @@ export type Scalars = {
 export type AgentInfo = {
   /** Agent EOA address */
   address: Scalars['String']['output'];
+  /** Chain ID */
+  chainId: Scalars['Int']['output'];
   /** Created date */
   createdAt: Scalars['DateTime']['output'];
   /** Agent description */
   description: Scalars['String']['output'];
   /** Agent ID */
   id: Scalars['String']['output'];
+  messages?: Maybe<Array<Message>>;
   /** Agent name */
   name: Scalars['String']['output'];
   /** Agent private key */
@@ -38,6 +41,8 @@ export type AgentInfo = {
   prompt: Scalars['String']['output'];
   /** Last updated date */
   updatedAt: Scalars['DateTime']['output'];
+  /** Agent vault address */
+  vaultAddress: Scalars['String']['output'];
 };
 
 export type AuthToken = {
@@ -75,6 +80,20 @@ export type CreateAgentInput = {
   name: Scalars['String']['input'];
   /** Agent prompt */
   prompt: Scalars['String']['input'];
+  /** Agent vault address */
+  vaultAddress: Scalars['String']['input'];
+};
+
+/** Message Model */
+export type Message = {
+  /** Message content */
+  content: Scalars['String']['output'];
+  /** Created date */
+  createdAt: Scalars['DateTime']['output'];
+  /** Message ID */
+  id: Scalars['String']['output'];
+  /** Last updated date */
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type Mutation = {
@@ -104,13 +123,34 @@ export type MutationVerifyLoginArgs = {
   input: VerifyUserInput;
 };
 
+export type PublicAgentInfo = {
+  /** Agent EOA address */
+  address: Scalars['String']['output'];
+  /** Chain ID */
+  chainId: Scalars['Int']['output'];
+  /** Created date */
+  createdAt: Scalars['DateTime']['output'];
+  /** Agent description */
+  description: Scalars['String']['output'];
+  /** Agent ID */
+  id: Scalars['String']['output'];
+  /** Agent name */
+  name: Scalars['String']['output'];
+  /** Agent prompt */
+  prompt: Scalars['String']['output'];
+  /** Last updated date */
+  updatedAt: Scalars['DateTime']['output'];
+  /** Agent vault address */
+  vaultAddress: Scalars['String']['output'];
+};
+
 export type Query = {
-  findAllAgents: Array<AgentInfo>;
+  findAllAgents: Array<PublicAgentInfo>;
   findAllTokens: Array<TokenInfo>;
   findAllUsers: Array<UserInfo>;
   findTokenByAddress: TokenInfo;
   findUser: UserInfo;
-  getAgent: AgentInfo;
+  getAgent: PublicAgentInfo;
 };
 
 

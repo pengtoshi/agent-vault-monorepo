@@ -19,6 +19,11 @@ export const ErrorMessage = {
   // Agent
   MSG_NOT_FOUND_OPENAI_API_KEY: "OpenAI API key not found.",
   MSG_NOT_FOUND_AGENT: "Agent not found.",
+  MSG_NOT_FOUND_AGENT_ACCOUNT: "Agent account not found.",
+  MSG_AGENT_EXECUTION_FAILED: "Agent execution failed.",
+
+  // Vault
+  MSG_STRATEGY_NOT_FOUND: "Strategy not found.",
 
   // External Api
   MSG_EXTERNAL_API_FETCH_FAILED: "External API fetch failed.",

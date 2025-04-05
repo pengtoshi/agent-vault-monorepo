@@ -78,25 +78,57 @@ model Chain {
 
 model Agent {
     /// Agent ID
-    id          String   @id @default(cuid())
-    /// Agent EOA address
-    address     String   @unique
-    /// Agent private key
-    privateKey  String   @unique
+    id           String        @id @default(cuid())
+    /// Agent account address
+    address      String        @unique
+    /// Agent account
+    account      AgentAccount?
+    /// Agent vault address
+    vaultAddress String        @unique
     /// Agent name
-    name        String
+    name         String
     /// Agent description
-    description String
+    description  String
     /// Chain which the agent vault is deployed
-    chain       Chain    @relation(fields: [chainId], references: [chainId])
+    chain        Chain         @relation(fields: [chainId], references: [chainId])
     /// Chain ID
-    chainId     Int
+    chainId      Int
     /// Base prompt
-    prompt      String
+    prompt       String
     /// Created date
-    createdAt   DateTime @default(now()) @db.Timestamp(3)
+    createdAt    DateTime      @default(now()) @db.Timestamp(3)
     /// Last updated date
-    updatedAt   DateTime @updatedAt @db.Timestamp(3)
+    updatedAt    DateTime      @updatedAt @db.Timestamp(3)
+    /// Messages
+    messages     Message[]
+}
+
+model AgentAccount {
+    /// Agent
+    agent      Agent    @relation(fields: [address], references: [address])
+    /// Agent account address
+    address    String   @id @unique
+    /// Agent private key
+    privateKey String   @unique
+    /// Created date
+    createdAt  DateTime @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt  DateTime @updatedAt @db.Timestamp(3)
+}
+
+model Message {
+    /// Message ID
+    id        String   @id @default(cuid())
+    /// Message content
+    content   String
+    /// Agent
+    agent     Agent    @relation(fields: [agentId], references: [id])
+    /// Agent ID
+    agentId   String
+    /// Created date
+    createdAt DateTime @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt DateTime @updatedAt @db.Timestamp(3)
 }
 
 enum ROLE {

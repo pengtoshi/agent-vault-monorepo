@@ -1,26 +1,33 @@
 import { openai } from "@ai-sdk/openai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
 import { viem } from "@goat-sdk/wallet-viem";
-import { Injectable } from "@nestjs/common";
+import { InjectRedis } from "@liaoliaots/nestjs-redis";
+import { InjectQueue } from "@nestjs/bullmq";
+import { Injectable, Logger } from "@nestjs/common";
+import { Cron, CronExpression } from "@nestjs/schedule";
 import { generateText } from "ai";
+import { Queue } from "bullmq";
+import Redis from "ioredis";
 import { createWalletClient, http } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { baseSepolia } from "viem/chains";
-import { ErrorMessage } from "@libs/constants";
+import { ErrorMessage, VIEM_CHAINS } from "@libs/constants";
 import type { CreateAgentInput } from "@libs/model";
 import { PrismaService } from "@libs/nestjs-core";
-import { getTokenPluginInput } from "@libs/utils-server";
+import type { Prisma } from "~/prisma/generated/client";
+import { getExecutionPrompt } from "./prompt";
 import { BlockchainService } from "../../common/blockchain/blockchain.service";
 import { agentVaultPlugin } from "../../common/plugin/vault/agent-vault.plugin";
 import { MarketService } from "../market/market.service";
-import { TokenService } from "../token/token.service";
 
 @Injectable()
 export class AgentService {
+  private readonly logger = new Logger(AgentService.name);
+
   constructor(
+    @InjectRedis() private readonly redis: Redis,
+    @InjectQueue("agent") private agentQueue: Queue,
     private readonly prisma: PrismaService,
     private readonly marketService: MarketService,
-    private readonly tokenService: TokenService,
     private readonly blockchainService: BlockchainService,
   ) {}
 
@@ -28,31 +35,30 @@ export class AgentService {
     const privateKey = generatePrivateKey();
     const account = privateKeyToAccount(privateKey);
 
-    const agent = await this.prisma.agent.create({
-      data: {
-        ...createAgentInput,
-        address: account.address,
-        privateKey,
-      },
+    return this.prisma.$transaction(async (prismaTransaction: Prisma.TransactionClient) => {
+      const agentInfo = await prismaTransaction.agent.create({
+        data: {
+          ...createAgentInput,
+          address: account.address,
+        },
+      });
+      await prismaTransaction.agentAccount.create({
+        data: {
+          address: account.address,
+          privateKey,
+        },
+      });
+      return agentInfo;
     });
-
-    return agent;
   }
 
-  async getAgentOnChainTools(agentId: string) {
-    const agent = await this.prisma.extended.agent.findUnique({
-      where: { id: agentId },
-    });
-    if (!agent) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT);
-
-    const rpcUrl = this.blockchainService.getRpcUrl(agent.chainId);
+  async getAgentOnChainTools(chainId: number, privateKey: string) {
+    const rpcUrl = this.blockchainService.getRpcUrl(chainId);
     const walletClient = createWalletClient({
-      account: privateKeyToAccount(agent.privateKey as `0x${string}`),
+      account: privateKeyToAccount(privateKey as `0x${string}`),
       transport: http(rpcUrl),
-      chain: baseSepolia,
+      chain: VIEM_CHAINS[chainId],
     });
-    // const tokens = await this.tokenService.findTokensByChainId(agent.chainId);
-    // const tokenPluginInputs = tokens.map((token) => getTokenPluginInput(token));
 
     const onChainTools = await getOnChainTools({
       wallet: viem(walletClient),
@@ -63,73 +69,66 @@ export class AgentService {
   }
 
   async executeAgent(agentId: string) {
-    try {
-      // const marketData = await this.marketService.getMarketData();
-      const mockMarketData = [
-        {
-          strategyName: "Test Defi",
-          token: "TestToken",
-          apy: 5.9,
-          tvl: 1000000,
-        },
-        {
-          strategyName: "Alt Test Defi",
-          token: "TestToken",
-          apy: 10.8,
-          tvl: 800000,
-        },
-      ];
-      const mockDefaultPrompt = "Manage the vault to maximize yield. Prefer the highest apy strategy.";
-      const mockVaultAddress = "0x1c55A489B09783E7D71a864444D13816705DE2AC";
-      const prompt = this.getPrompt(mockMarketData, mockDefaultPrompt, "Test Defi", mockVaultAddress);
-      console.log(prompt);
+    const agentInfo = await this.prisma.extended.agent.findUnique({
+      where: { id: agentId },
+    });
+    if (!agentInfo) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT);
 
-      const tools = await this.getAgentOnChainTools(agentId);
-      const result = await generateText({
-        model: openai("gpt-4o-mini"),
-        tools,
-        maxSteps: 10,
-        prompt,
-        onStepFinish: (event) => {
-          console.log("Tool execution result:", event.toolResults);
-        },
-      });
+    const agentAccountInfo = await this.prisma.agentAccount.findUnique({
+      where: { address: agentInfo.address },
+    });
+    if (!agentAccountInfo) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT_ACCOUNT);
 
-      console.log("AI Agent response:", result.text);
-      return result.text;
-    } catch (error) {
-      console.error("Error executing AI Agent:", error);
-      throw error;
-    }
+    const { prompt: defaultPrompt, vaultAddress, chainId } = agentInfo;
+    const { privateKey } = agentAccountInfo;
+
+    const marketData = await this.marketService.getMarketData();
+    const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress);
+    const tools = await this.getAgentOnChainTools(chainId, privateKey);
+
+    const result = await generateText({
+      model: openai("gpt-4o-mini"),
+      tools,
+      maxSteps: 10,
+      prompt,
+      onStepFinish: (event) => {
+        this.logger.log("Tool execution:", event.toolResults);
+      },
+    });
+
+    await this.prisma.message.create({
+      data: {
+        agentId,
+        content: result.text,
+      },
+    });
   }
 
-  private getPrompt(marketData: any, defaultPrompt: string, currentStrategyName: string, vaultAddress: string): string {
-    return ` 
-    Current market conditions(in JSON format):
-    ${JSON.stringify(marketData)}
+  // TODO: Uncomment
+  // @Cron(CronExpression.EVERY_30_MINUTES)
+  async executeAllAgents() {
+    const agents = await this.prisma.extended.agent.findMany();
+    if (!agents || agents.length === 0) return false;
 
-    Vault creator request: 
-    ${defaultPrompt}
+    await Promise.all(
+      agents.map(async (agent) => {
+        await this.agentQueue.add("executeAgent", { agentId: agent.id });
+      }),
+    );
 
-    Name of the current strategy:
-    ${currentStrategyName}
-
-    =====================================================
-    
-    You are an AI Agent managing a Agent-managed DeFi vault.
-    Your vault address is "${vaultAddress}".
-    Based on this information above, analyze the market and determine to set a new strategy or keep the current strategy.
-    You can get the list of strategy by calling the tool "agent_vault_get_strategy_and_addresses".
-    To set a new strategy, you need to call the tool "agent_vault_set_new_strategy".
-    If you decide to keep the current strategy, return a reason why.
-    `;
+    return true;
   }
 
   async getAgent(agentId: string) {
-    return this.prisma.agent.findUnique({ where: { id: agentId } });
+    return this.prisma.extended.agent.findUnique({ where: { id: agentId } });
   }
 
   async findAllAgents() {
-    return this.prisma.agent.findMany();
+    return this.prisma.extended.agent.findMany();
+  }
+
+  async resolveMessages(agentId: string) {
+    if (!agentId) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT);
+    return this.prisma.extended.message.findMany({ where: { agentId } });
   }
 }
