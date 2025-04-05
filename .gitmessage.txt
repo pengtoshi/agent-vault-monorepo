@@ -1,0 +1,9 @@
+{type}: {message}
+# --- COMMIT END ---
+# <type> list
+#   Feat    : 새로운 기능 추가
+#   Fix     : 버그 수정
+#   Deploy  : 배포 관련 작업
+#   Refactor: 코드 리팩토링
+#   Test    : 테스트 코드, 리팩토링 테스트 코드
+#   Chore   : 빌드 업무, 패키지 매니저, 구성 등

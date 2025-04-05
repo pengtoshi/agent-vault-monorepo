@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  # Postgres DB
+  postgres-db:
+    container_name: server-nest-db
+    image: library/postgres:14-alpine
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - local-tier
+    env_file:
+      - ./apps/server-nest/.env.development
+
+  # Redis
+  redis:
+    image: redis:7
+    container_name: server-nest-redis
+    restart: unless-stopped
+    networks:
+      - local-tier
+    volumes:
+      - server-nest-redis:/data
+    command: >
+      --requirepass localpass
+    ports:
+      - "6379:6379"
+
+volumes:
+  server-nest-redis:
+    driver: local
+
+networks:
+  local-tier:
+    driver: bridge

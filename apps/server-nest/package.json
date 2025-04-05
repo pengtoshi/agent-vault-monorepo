@@ -1,0 +1,9 @@
+{
+    "name": "server-nest",
+    "version": "0.1.0",
+    "scripts": {
+      "prepare:prisma": "prisma generate --schema /app/prisma/schema.prisma",
+      "db-migrate:deploy": "prisma migrate deploy"
+    }
+  }
+  

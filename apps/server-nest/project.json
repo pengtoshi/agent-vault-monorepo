@@ -1,0 +1,49 @@
+{
+  "name": "server-nest",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/server-nest/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "externalDependencies": "all",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/server-nest",
+        "main": "apps/server-nest/src/main.ts",
+        "tsConfig": "apps/server-nest/tsconfig.app.json",
+        "assets": ["apps/server-nest/src/assets"],
+        "webpackConfig": "apps/server-nest/webpack.config.js",
+        "scripts": [],
+        "buildLibsFromSource": true,
+        "generatePackageJson": true,
+        "isolatedConfig": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "server-nest:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "server-nest:build:development"
+        },
+        "production": {
+          "buildTarget": "server-nest:build:production"
+        }
+      }
+    }
+  },
+  "tags": ["scope:server"]
+}

@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dropdown should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <div
+      class="flex h-[160px] w-full"
+    >
+      <div
+        class="flex w-60 flex-col items-start gap-1.5 text-14/body"
+      >
+        <div
+          class="relative inline-block w-full"
+        >
+          <button
+            class="group relative flex h-10 w-full items-center justify-between gap-2 rounded-md border border-gray-300 bg-white px-4 focus:border-primary-500 text-gray-400"
+            type="button"
+          >
+            <div
+              class="absolute inset-0 bg-gray-950 opacity-0 transition-opacity duration-300 group-hover:opacity-[0.06] group-focus:opacity-[0.06] group-active:opacity-[0.12]"
+            />
+            Select an option
+            <div
+              class="transition-transform duration-300"
+              height="20"
+              width="20"
+            />
+          </button>
+        </div>
+        <div
+          class="flex w-full flex-col items-start gap-0.5"
+        />
+      </div>
+    </div>
+  </div>
+</body>
+`;

@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2019",
+    "outDir": "../dist/out-tsc",
+    "declaration": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false
+  },
+  "files": [],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "../tools"],
+  "references": []
+}

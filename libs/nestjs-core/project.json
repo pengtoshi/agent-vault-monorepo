@@ -1,0 +1,18 @@
+{
+  "name": "nestjs-core",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/nestjs-core/src",
+  "projectType": "library",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/nestjs-core"],
+      "options": {
+        "jestConfig": "libs/nestjs-core/jest.config.ts",
+        "maxWorkers": 3,
+        "memoryUsage": "4G"
+      }
+    }
+  },
+  "tags": ["scope:server"]
+}

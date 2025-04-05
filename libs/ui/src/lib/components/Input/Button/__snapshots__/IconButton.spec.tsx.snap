@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IconButton should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <div
+      class="flex flex-row gap-4"
+    >
+      <button
+        class="group"
+        type="button"
+      >
+        <div
+          class="text-gray-950 group-disabled:text-gray-350"
+          height="24"
+          width="24"
+        />
+      </button>
+      <button
+        class="group"
+        disabled=""
+        type="button"
+      >
+        <div
+          class="text-gray-950 group-disabled:text-gray-350"
+          height="24"
+          width="24"
+        />
+      </button>
+    </div>
+  </div>
+</body>
+`;

@@ -1,0 +1,61 @@
+{
+  "name": "client-next",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/client-next",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "root": "apps/client-next",
+        "outputPath": "dist/apps/client-next",
+        "assets": [
+          {
+            "glob": "**/*.!(ts)",
+            "input": "libs/ui/public",
+            "output": "shared"
+          }
+        ]
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/client-next"
+        },
+        "qa": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "client-next:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "client-next:build:development",
+          "port": 4200,
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "client-next:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "client-next:build:production"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["scope:client"]
+}

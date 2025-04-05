@@ -1,0 +1,64 @@
+name: NX Lint And Test
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+      - release/*
+  workflow_dispatch:
+
+concurrency: lint-and-test
+
+jobs:
+  lint_and_test:
+    runs-on: ubuntu-latest
+    services:
+      postgres-db:
+        image: postgres:14-alpine
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+        env:
+          POSTGRES_USER: localusername
+          POSTGRES_PASSWORD: localpass
+          POSTGRES_DB: localdb_e2e
+      redis:
+        image: redis:7
+        ports:
+          - "6379:6379"
+        options: --health-cmd="redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 3
+    environment: qa
+
+    steps:
+      - name: 🚜 Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+          token: ${{ secrets.ACTION_TOKEN }}
+      - name: 🏠 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.12.2
+      - name: Restore node_modules from cache
+        run: |
+          if [ -d "../node_modules_cache" ]; then
+              echo "Restoring node_modules from cache"
+              mv ../node_modules_cache ./node_modules
+          fi
+      - name: 📦 Install Dependencies
+        run: yarn install --ignore-engines --prefer-offline --frozen-lockfile --network-timeout 1000000
+      - name: 👷🏻‍♀️ NX Build
+        run: yarn build:all
+      - name: 🔥 NX Lint
+        run: yarn lint:all
+      - name: 📝 Test DB Migration
+        run: yarn db-migrate:test
+      - name: 🧪 NX Test
+        run: yarn test:all:without-prepare
+      - name: Cache node_modules
+        run: |
+          if [ -d "./node_modules" ]; then
+              echo "Caching node_modules"
+              mv ./node_modules ../node_modules_cache
+          fi

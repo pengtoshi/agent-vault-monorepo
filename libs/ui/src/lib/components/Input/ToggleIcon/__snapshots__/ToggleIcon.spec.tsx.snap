@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ToggleIcon should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <button
+      class="group relative"
+      type="button"
+    >
+      <div
+        class="text-gray-400"
+        height="24"
+        width="24"
+      />
+      <div
+        class="absolute inset-0 bg-gray-950 opacity-0 transition-opacity duration-300 group-hover:opacity-[0.06] group-active:opacity-[0.12] -left-1 -top-1 h-8 w-8 rounded-full"
+      />
+    </button>
+  </div>
+</body>
+`;

@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Radio should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <button
+      class="group relative p-0.5 disabled:opacity-40 h-6 w-6"
+      type="button"
+    >
+      <div
+        class="h-full w-full rounded-full bg-gray-50 border-[1.5px] border-gray-300"
+      />
+      <div
+        class="absolute inset-0 bg-gray-950 opacity-0 transition-opacity duration-300 group-hover:opacity-[0.06] group-active:opacity-[0.12] -left-1 -top-1 rounded-full h-8 w-8"
+      />
+    </button>
+  </div>
+</body>
+`;

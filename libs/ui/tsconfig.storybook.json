@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["../../apps/client-next/**/*.stories.tsx", "../../libs/ui/**/*.stories.tsx"],
+  "exclude": [
+    "../../**/*.spec.js",
+    "../../**/*.test.js",
+    "../../**/*.spec.ts",
+    "../../**/*.test.ts",
+    "../../**/*.spec.tsx",
+    "../../**/*.test.tsx",
+    "../../**/*.spec.jsx",
+    "../../**/*.test.jsx"
+  ]
+}

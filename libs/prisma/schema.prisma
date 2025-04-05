@@ -1,0 +1,111 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("PRISMA_DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+    output   = "./generated/client"
+}
+
+model User {
+    /// 지갑 주소
+    address   String     @id @unique @db.VarChar(42)
+    /// 역할
+    role      ROLE       @default(USER)
+    /// 상태
+    status    STATUS     @default(ACTIVE)
+    /// 일회용 논스값
+    nonce     String?
+    /// 인증 관련 정보
+    authToken AuthToken?
+    /// 생성 일시
+    createdAt DateTime   @default(now()) @db.Timestamp(3)
+    /// 수정 일시
+    updatedAt DateTime   @updatedAt @db.Timestamp(3)
+}
+
+model AuthToken {
+    /// 사용자
+    user                  User    @relation(fields: [userAddress], references: [address])
+    /// 사용자 지갑 주소
+    userAddress           String  @id @unique
+    /// access token
+    accessToken           String
+    /// 암호화된 refresh token
+    encryptedRefreshToken String?
+}
+
+model Token {
+    /// 아이디
+    id        String   @id @default(cuid())
+    /// 토큰 주소
+    address   String   @unique
+    /// 체인
+    chain     Chain    @relation(fields: [chainId], references: [chainId])
+    /// 체인 ID
+    chainId   Int
+    /// 이름
+    name      String
+    /// 심볼
+    symbol    String
+    /// 자리수
+    decimals  Int
+    /// 로고 URL
+    logoUrl   String
+    /// 가격
+    price     Float
+    /// 생성 일시
+    createdAt DateTime @default(now()) @db.Timestamp(3)
+    /// 수정 일시
+    updatedAt DateTime @updatedAt @db.Timestamp(3)
+}
+
+model Chain {
+    /// Chain ID
+    chainId   Int      @id @unique
+    /// Chain name
+    name      String
+    /// Created date
+    createdAt DateTime @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt DateTime @updatedAt @db.Timestamp(3)
+    /// Tokens
+    tokens    Token[]
+    /// Agents
+    agents    Agent[]
+}
+
+model Agent {
+    /// Agent ID
+    id          String   @id @default(cuid())
+    /// Agent EOA address
+    address     String   @unique
+    /// Agent private key
+    privateKey  String   @unique
+    /// Agent name
+    name        String
+    /// Agent description
+    description String
+    /// Chain which the agent vault is deployed
+    chain       Chain    @relation(fields: [chainId], references: [chainId])
+    /// Chain ID
+    chainId     Int
+    /// Base prompt
+    prompt      String
+    /// Created date
+    createdAt   DateTime @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt   DateTime @updatedAt @db.Timestamp(3)
+}
+
+enum ROLE {
+    USER
+    ADMIN
+}
+
+enum STATUS {
+    ACTIVE
+    INACTIVE
+    DELETE
+}

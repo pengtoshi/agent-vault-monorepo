@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextField should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <div
+      class="flex w-full flex-col items-start gap-1.5 w-[240px]"
+    >
+      <div
+        class="flex h-10 px-4 gap-2.5 items-center justify-between self-stretch rounded-md border border-gray-300 autofill-hide transition-all duration-300 bg-gray-100 hover:bg-gray-50 focus-within:border-primary-500 focus-within:bg-gray-50"
+      >
+        <input
+          class="text-14/body peer w-full self-stretch overflow-ellipsis bg-transparent focus:outline-none text-gray-950 placeholder:text-gray-400 disabled:text-gray-350"
+          id="ui-:r0:"
+          placeholder="Enter text here"
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        class="flex w-full flex-col items-start gap-0.5"
+      />
+    </div>
+  </div>
+</body>
+`;

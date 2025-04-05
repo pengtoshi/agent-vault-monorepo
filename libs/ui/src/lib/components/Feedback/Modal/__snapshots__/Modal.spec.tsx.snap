@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal should render 1`] = `
+<body>
+  <div>
+    <section
+      aria-atomic="false"
+      aria-label="Notifications alt+T"
+      aria-live="polite"
+      aria-relevant="additions text"
+      tabindex="-1"
+    />
+    <button
+      aria-controls="radix-:r0:"
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      data-state="closed"
+      type="button"
+    >
+      <button
+        class="group w-fit inline-flex items-center justify-center whitespace-nowrap rounded-md transition-all duration-300 disabled:pointer-events-none bg-primary-500 !text-gray-50 disabled:bg-gray-150 disabled:text-gray-350 h-10 px-5 text-14/button gap-1.5 relative overflow-hidden"
+      >
+        <div
+          class="absolute inset-0 bg-gray-950 opacity-0 transition-opacity duration-300 group-hover:opacity-[0.06] group-active:opacity-[0.12]"
+        />
+        <span
+          class="relative z-10"
+        >
+          Show Modal
+        </span>
+      </button>
+    </button>
+  </div>
+</body>
+`;
