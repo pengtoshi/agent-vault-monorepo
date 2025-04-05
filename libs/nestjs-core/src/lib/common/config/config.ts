@@ -39,6 +39,11 @@ export const config = (): ConfigType => ({
     rpcUrl: {
       84532: process.env.BASE_SEPOLIA_RPC_URL!,
       11155420: process.env.OPTIMISM_SEPOLIA_RPC_URL!,
+      31: process.env.ROOTSTOCK_TESTNET_RPC_URL!,
+      545: process.env.FLOW_TESTNET_RPC_URL!,
+      44787: process.env.CELO_ALFAJORES_RPC_URL!,
+      48899: process.env.ZIRCUIT_TESTNET_RPC_URL!,
+      80002: process.env.POLYGON_AMOY_RPC_URL!,
     },
   },
 });

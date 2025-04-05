@@ -36,7 +36,14 @@ export class AgentService {
   async createAgent(createAgentInput: CreateAgentInput) {
     const { accountAddress, accountPrivateKey, ...agentInput } = createAgentInput;
     return this.prisma.$transaction(async (prismaTransaction: Prisma.TransactionClient) => {
-      await this.tokenService.createTokenTx(createAgentInput.tokenAddress, createAgentInput.chainId, prismaTransaction);
+      const tokenInfo = await this.tokenService.findTokenByAddress(createAgentInput.tokenAddress);
+      if (!tokenInfo) {
+        await this.tokenService.createTokenTx(
+          createAgentInput.tokenAddress,
+          createAgentInput.chainId,
+          prismaTransaction,
+        );
+      }
       const agentInfo = await prismaTransaction.agent.create({
         data: {
           ...agentInput,
@@ -105,7 +112,7 @@ export class AgentService {
     const { privateKey } = agentAccountInfo;
 
     const marketData = await this.marketService.getMockMarketData(chainId);
-    const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress, riskLevel);
+    const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress, chainId, riskLevel);
     const tools = await this.getAgentOnChainTools(chainId, privateKey);
 
     const result = await generateText({

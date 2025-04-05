@@ -19,6 +19,8 @@ import { ReactComponent as CircleQuestion } from "~/ui/public/icons/circle_quest
 import { ReactComponent as CircleQuestionFilled } from "~/ui/public/icons/circle_question_filled.svg";
 import { ReactComponent as Close } from "~/ui/public/icons/close.svg";
 import { ReactComponent as CloseThick } from "~/ui/public/icons/close_thick.svg";
+import { ReactComponent as Crown } from "~/ui/public/icons/crown.svg";
+import { ReactComponent as CrownFilled } from "~/ui/public/icons/crown_filled.svg";
 import { ReactComponent as Dot } from "~/ui/public/icons/dot.svg";
 import { ReactComponent as Download } from "~/ui/public/icons/download.svg";
 import { ReactComponent as ExternalLink } from "~/ui/public/icons/external_link.svg";
@@ -49,6 +51,8 @@ export const IconVariants = {
   CircleQuestionFilled,
   Close,
   CloseThick,
+  Crown,
+  CrownFilled,
   Dot,
   Download,
   ExternalLink,

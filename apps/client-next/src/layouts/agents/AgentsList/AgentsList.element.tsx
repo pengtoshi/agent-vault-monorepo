@@ -2,10 +2,12 @@ import clsx from "clsx";
 import { UsersRound } from "lucide-react";
 import { useRouter } from "next/router";
 import { NetworkIcon } from "@libs/ui";
+import type { UIProps } from "@libs/ui";
+import { formatNumber } from "@libs/utils-client";
 import { AgentVaultLogo } from "~/client-next/src/components/AgentVaultLogo/AgentVaultLogo";
 import { TokenLogo } from "~/client-next/src/components/TokenLogo/TokenLogo";
 
-export interface AgentElementProps {
+export interface AgentElementProps extends UIProps.Button {
   agentId: string;
   chainId: string;
   tokenImageUrl?: string;
@@ -14,6 +16,7 @@ export interface AgentElementProps {
   depositNum: number;
   depositAmount: number;
   apy: number;
+  lastElement?: boolean;
 }
 
 export const AgentElement = ({
@@ -25,6 +28,9 @@ export const AgentElement = ({
   depositNum,
   depositAmount,
   apy,
+  lastElement = false,
+  className,
+  ...props
 }: AgentElementProps) => {
   const router = useRouter();
 
@@ -32,7 +38,12 @@ export const AgentElement = ({
     <button
       type="button"
       onClick={() => router.push(`/agents/${agentId}`)}
-      className="group flex w-full items-center justify-between gap-3 border-b border-gray-200 py-4"
+      className={clsx(
+        "group flex w-full items-center justify-between gap-3 border-b border-gray-200 py-4",
+        lastElement && "border-b-0",
+        className,
+      )}
+      {...props}
     >
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <div className="transition-transform duration-1000 ease-out group-hover:-translate-y-1">
@@ -50,7 +61,7 @@ export const AgentElement = ({
             </div>
             <div className="flex items-center gap-1">
               <TokenLogo tokenImageUrl={tokenImageUrl} size={16} />
-              <span className="text-14/body text-gray-600">{depositAmount}</span>
+              <span className="text-14/body text-gray-600">{formatNumber(depositAmount)}</span>
             </div>
           </div>
         </div>

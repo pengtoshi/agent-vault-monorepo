@@ -10,7 +10,7 @@ export class BlockchainService {
 
   getRpcUrl(chainId: string) {
     const networkConfig = this.configService.get<NetworkConfig>("network")!;
-    const rpcUrl = networkConfig.rpcUrl[chainId];
+    const rpcUrl = networkConfig.rpcUrl[Number(chainId)];
     if (!rpcUrl) throw new Error(ErrorMessage.MSG_NOT_FOUND_RPC_URL);
     return rpcUrl;
   }

@@ -1,3 +1,5 @@
+import { formatNumber } from "@libs/utils-client";
+
 export interface VaultMetrics {
   depositNum: number;
   depositAmount: number;
@@ -22,7 +24,7 @@ export const VaultPerformanceCard = ({ metrics }: VaultPerformanceCardProps) => 
           <div className="flex flex-col items-center gap-1 rounded-lg bg-gray-50 p-3">
             <span className="text-12/body text-gray-500">Total Deposit</span>
             <span className="text-18/heading text-gray-950">
-              {metrics.depositAmount} {metrics.tokenSymbol}
+              {formatNumber(metrics.depositAmount)} {metrics.tokenSymbol}
             </span>
           </div>
           <div className="flex flex-col items-center gap-1 rounded-lg bg-blue-50 p-3">

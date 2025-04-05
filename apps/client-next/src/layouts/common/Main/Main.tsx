@@ -43,7 +43,7 @@ export const Main = ({
         {/* Header */}
         {!hideHeader && header}
         {/* Main Content */}
-        <div className="pb-safe-bottom flex w-full max-w-[600px] flex-1 flex-col items-stretch justify-start gap-6 px-4 py-6">
+        <div className="pb-safe-bottom flex w-full max-w-[600px] flex-1 flex-col items-stretch justify-start gap-8 px-4 py-6">
           {children}
         </div>
         {/* Bottom Navigation */}

@@ -5,12 +5,14 @@ export const getExecutionPrompt = (
   marketData: DefillamaYieldsApiResponse,
   defaultPrompt: string,
   vaultAddress: string,
+  chainId: string,
   riskLevel: number,
 ): string => {
   return `
 Role:
 You are an AI agent responsible for managing an AI-managed vault.
 The vault address is "${vaultAddress}".
+The chain ID of the vault is "${chainId}".
 
 Information:
 - Market Conditions:

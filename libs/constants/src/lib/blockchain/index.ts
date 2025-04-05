@@ -22,9 +22,10 @@ export const NetworkNameByChainId: Record<number, string> = {
 };
 
 export const VAULT_FACTORY_ADDRESSES: Record<number, Address> = {
-  545: "0xe3927e57Fa5caA8Ae01c140099C2ceada3DF7163", // Flow
-  31: "0xe3927e57Fa5caA8Ae01c140099C2ceada3DF7163", // Rootstock
-  44787: "0xe3927e57Fa5caA8Ae01c140099C2ceada3DF7163", // Celo
+  545: "0x330EBFf1F8c8797Fb930a670A67CE864b7887059", // Flow
+  31: "0x6e57e8Dd5764F2C2C176B878808BC73b2a8AcE42", // Rootstock
+  44787: "0x519B51aC32ec0857de0AffECa3F22B3C9F8E0cDD", // Celo
+  48899: "0xe3927e57Fa5caA8Ae01c140099C2ceada3DF7163", // Zircuit
 };
 
 export const NATIVE_CURRENCY_SYMBOLS: Record<number, string> = {

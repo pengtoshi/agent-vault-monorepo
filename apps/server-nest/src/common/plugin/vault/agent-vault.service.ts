@@ -3,7 +3,7 @@ import { EVMWalletClient } from "@goat-sdk/wallet-evm";
 import type { Abi } from "viem";
 import { ErrorMessage, STRATEGY_INFOS } from "@libs/constants";
 import { AgentVault__factory } from "@apps/typechains";
-import { EmptyParams, GetStrategyParams, SetNewStrategyParams } from "./parameter";
+import { GetStrategyListParams, GetStrategyParams, SetNewStrategyParams } from "./parameter";
 
 export const TOOL_NAME = {
   GET_STRATEGIES_INFO: "agent_vault_get_strategies_info",
@@ -16,8 +16,8 @@ export class AgentVaultService {
     name: TOOL_NAME.GET_STRATEGIES_INFO,
     description: "Get the list of strategy infomation. It includes name of the strategy and its address.",
   })
-  getAllStrategiesInfo(parameters: EmptyParams) {
-    return STRATEGY_INFOS;
+  getAllStrategiesInfo(parameters: GetStrategyListParams) {
+    return STRATEGY_INFOS[Number(parameters.chainId)];
   }
 
   @Tool({
@@ -32,7 +32,7 @@ export class AgentVaultService {
         abi: AgentVault__factory.abi as Abi,
       })
     ).value as string;
-    const strategyName = STRATEGY_INFOS.find(
+    const strategyName = STRATEGY_INFOS[Number(parameters.chainId)].find(
       (strategy) => strategy.strategyAddress === currentStrategyAddress,
     )?.strategyName;
     if (!strategyName) {

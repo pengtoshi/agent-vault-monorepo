@@ -40,10 +40,7 @@ export const AgentInfoCard = ({ agentInfo }: AgentInfoCardProps) => {
                 size={16}
                 iconClassName="!text-gray-600"
                 onClick={() => {
-                  window.open(
-                    `https://${agentInfo.chain?.blockExplorerUrl}/address/${agentInfo.vaultAddress}`,
-                    "_blank",
-                  );
+                  window.open(`${agentInfo.chain?.blockExplorerUrl}/address/${agentInfo.vaultAddress}`, "_blank");
                 }}
               />
             </div>
@@ -59,7 +56,7 @@ export const AgentInfoCard = ({ agentInfo }: AgentInfoCardProps) => {
                 size={16}
                 iconClassName="!text-gray-600"
                 onClick={() => {
-                  window.open(`https://${agentInfo.chain?.blockExplorerUrl}/address/${agentInfo.address}`, "_blank");
+                  window.open(`${agentInfo.chain?.blockExplorerUrl}/address/${agentInfo.address}`, "_blank");
                 }}
               />
             </div>

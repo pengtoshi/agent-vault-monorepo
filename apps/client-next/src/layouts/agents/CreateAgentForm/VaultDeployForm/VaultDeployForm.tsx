@@ -11,7 +11,6 @@ import { Button, Textfield } from "@libs/ui";
 import { Patterns, getEventArgsFromReceipt } from "@libs/utils-client";
 import { AgentVaultFactory__factory } from "@apps/typechains";
 
-type TokenAddressInputState = "default" | "valid" | "invalid";
 type DeployState = "default" | "deploying" | "deployed";
 
 const DeployStateText: Record<DeployState, string> = {
@@ -82,20 +81,18 @@ export const VaultDeployForm = ({ chains, onBack }: VaultDeployFormProps) => {
         ],
         value: agentInitialFund,
       });
-      console.log(hash);
+
       const receipt = await publicClient.waitForTransactionReceipt({ hash });
       const eventArgs = getEventArgsFromReceipt(
         receipt,
         AgentVaultFactory__factory.abi.find((abi) => abi.name === "VaultCreated") as unknown as EventFragment,
       ) as { vault: Address };
-      console.log(eventArgs);
 
       setValue("vaultAddress", eventArgs.vault);
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(vaultAddress);
 
   useEffect(() => {
     if (isPending) {

@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Address } from "viem";
-import { useAccount, useSwitchChain } from "wagmi";
+import { erc20Abi } from "viem";
+import { useAccount, useReadContract, useSwitchChain } from "wagmi";
 import type { AgentResponse } from "@libs/graphql";
 import { Button } from "@libs/ui";
 import { type TabItem, TabNavigation } from "~/client-next/src/components/TabNavigation/TabNavigation";
@@ -21,14 +22,30 @@ export const AgentDetails = ({ agentInfo }: { agentInfo: AgentResponse }) => {
   const { chainId } = useAccount();
   const { switchChain } = useSwitchChain();
 
+  // 페이지 진입 시 체인 전환 로직
+  useEffect(() => {
+    if (!chainId || !agentInfo.chainId) return;
+    if (chainId !== Number(agentInfo.chainId)) {
+      switchChain({ chainId: Number(agentInfo.chainId) });
+    }
+  }, [chainId, agentInfo.chainId, switchChain]);
+
+  // 토큰 심볼 읽어오기
+  const { data: tokenSymbol = "ETH" } = useReadContract({
+    address: agentInfo.tokenAddress as Address,
+    abi: erc20Abi,
+    functionName: "symbol",
+    chainId: Number(agentInfo.chainId),
+  });
+
   const vaultMetrics: VaultMetrics = useMemo(
     () => ({
-      depositNum: 127,
-      depositAmount: 25430,
+      depositNum: agentInfo.vaultDepositNumber || 0,
+      depositAmount: agentInfo.vaultDepositAmount || 0,
       apy: 12.5,
-      tokenSymbol: "ETH",
+      tokenSymbol,
     }),
-    [],
+    [agentInfo.vaultDepositNumber, agentInfo.vaultDepositAmount, tokenSymbol],
   );
 
   const sortedMessages = useMemo(() => {
