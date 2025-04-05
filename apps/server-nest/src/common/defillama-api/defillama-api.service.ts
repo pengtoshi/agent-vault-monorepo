@@ -4,9 +4,10 @@ import { ConfigService } from "@nestjs/config";
 import type { AxiosError } from "axios";
 import { catchError, firstValueFrom } from "rxjs";
 import { EXTERNAL_API_CACHE_EXPIRES, ErrorMessage } from "@libs/constants";
-import type { DefiLlamaPoolsApiResponse } from "@libs/model";
+import type { DefillamaYieldsApiResponse } from "@libs/model";
 import type { DefiLlamaConfig } from "@libs/nestjs-core";
 import { Cacheable } from "@libs/nestjs-core";
+import { mockDefillamaResponse } from "~/server-nest/src/mock/mockDefillamaResponse";
 
 // NOTE: This service is sample code for using external API.
 // TODO: Change this file after implementing the actual service.
@@ -31,7 +32,7 @@ export class DefillamaApiService {
 
     const { data } = await firstValueFrom(
       this.httpService
-        .get<DefiLlamaPoolsApiResponse>(path, {
+        .get<DefillamaYieldsApiResponse>(path, {
           headers,
         })
         .pipe(
@@ -47,5 +48,13 @@ export class DefillamaApiService {
     }
 
     return data;
+  }
+
+  // Mock function
+  getAllMockPools(chainId: string, projectNames: string[]): DefillamaYieldsApiResponse {
+    return {
+      status: "success",
+      data: projectNames.map((projectName) => mockDefillamaResponse(chainId, projectName)),
+    };
   }
 }

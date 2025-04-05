@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "@nestjs/graphql";
+import { Field, Float, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType({ description: "Agent Model" })
 export class AgentInfo {
@@ -10,6 +10,12 @@ export class AgentInfo {
 
   @Field(() => String, { nullable: false, description: "Agent vault address" })
   vaultAddress!: string;
+
+  @Field(() => Int, { nullable: false, description: "Agent vault deposit number" })
+  vaultDepositNumber!: number;
+
+  @Field(() => Float, { nullable: false, description: "Agent vault deposit amount" })
+  vaultDepositAmount!: number;
 
   @Field(() => String, { nullable: false, description: "Agent token address" })
   tokenAddress!: string;
@@ -25,6 +31,9 @@ export class AgentInfo {
 
   @Field(() => String, { nullable: false, description: "Agent prompt" })
   prompt!: string;
+
+  @Field(() => Int, { nullable: false, description: "Agent risk level" })
+  riskLevel!: number;
 
   @Field(() => Date, { nullable: false, description: "Created date" })
   createdAt!: Date;

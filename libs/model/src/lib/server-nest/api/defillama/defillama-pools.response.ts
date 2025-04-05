@@ -1,40 +1,35 @@
-export type DefiLlamaPoolsApiResponse = {
+export type DefillamaYieldsApiResponse = {
   status: string;
-  data: PoolUpdateData[];
+  data: DefillamaYieldType[];
 };
 
-/** DefiLlama '/pools' api 반환 값에서 사용하는 데이터 */
-export type PoolUpdateData = {
+export enum PredictedClassType {
+  StableUp = "Stable/Up",
+  StableDown = "Stable/Down",
+  VolatileUp = "Volatile/Up",
+  VolatileDown = "Volatile/Down",
+}
+
+/** Data type for DefiLlama '/yields' api response */
+export interface DefillamaYieldType {
   chain: string;
-  // project: string;
-  // symbol: string;
+  project: string;
   tvlUsd: number;
   apyBase: number;
-  apyReward: number | null;
+  apyReward: number;
   apy: number;
-  // rewardTokens: string[] | null;
-  pool: string;
-  // apyPct1D: number;
-  // apyPct7D: number;
-  // apyPct30D: number;
-  // stablecoin: boolean;
-  // ilRisk: string;
-  // exposure: string;
-  // predictions: {
-  //   predictedClass: string;
-  //   predictedProbability: number;
-  //   binnedConfidence: number;
-  // };
-  // poolMeta: string | null;
-  // mu: number;
-  // sigma: number;
-  // count: number;
-  // outlier: boolean;
-  // underlyingTokens: string[];
-  // il7d: number | null;
-  // apyBase7d: number | null;
-  // apyMean30d: number;
-  // volumeUsd1d: number | null;
-  // volumeUsd7d: number | null;
-  // apyBaseInception: number | null;
-};
+  apyPct1D: number;
+  apyPct7D: number;
+  apyPct30D: number;
+  ilRisk: string;
+  predictions: {
+    predictedClass: PredictedClassType;
+    predictedProbability: number;
+    binnedConfidence: number;
+  };
+  poolMeta?: string;
+  apyBase7d: number;
+  apyMean30d: number;
+  volumeUsd1d: number;
+  volumeUsd7d: number;
+}

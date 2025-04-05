@@ -83,7 +83,7 @@ export class AgentService {
     const { prompt: defaultPrompt, vaultAddress, chainId } = agentInfo;
     const { privateKey } = agentAccountInfo;
 
-    const marketData = await this.marketService.getMarketData();
+    const marketData = await this.marketService.getMockMarketData(chainId);
     const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress);
     const tools = await this.getAgentOnChainTools(chainId, privateKey);
 

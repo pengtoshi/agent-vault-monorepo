@@ -19,3 +19,13 @@ export const VIEM_CHAINS = {
   44787: celoAlfajores,
   545: flowTestnet,
 };
+
+export const NetworkNameByChainId: Record<number, string> = {
+  84532: "Base", // Testnet(Sepolia)
+  11155420: "Optimism", // Testnet(Sepolia)
+  48899: "Zircuit", // Testnet
+  80002: "Polygon", // Testnet(Amoy)
+  31: "Rootstock", // Testnet
+  44787: "Celo", // Testnet(Alfajores)
+  545: "Flow", // Testnet
+};

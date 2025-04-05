@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Agent" ADD COLUMN     "riskLevel" INTEGER NOT NULL DEFAULT 3,
+ADD COLUMN     "vaultDepositAmount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+ADD COLUMN     "vaultDepositNumber" INTEGER NOT NULL DEFAULT 0;

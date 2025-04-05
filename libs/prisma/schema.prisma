@@ -84,33 +84,39 @@ model Chain {
 
 model Agent {
     /// Agent ID
-    id           String        @id @default(cuid())
+    id                 String        @id @default(cuid())
     /// Agent account address
-    address      String        @unique
+    address            String        @unique
     /// Agent account
-    account      AgentAccount?
+    account            AgentAccount?
     /// Agent vault address
-    vaultAddress String        @unique
+    vaultAddress       String        @unique
+    /// Agent vault deposit number
+    vaultDepositNumber Int           @default(0)
+    /// Agent vault deposit amount
+    vaultDepositAmount Float         @default(0)
     /// token
-    token        Token?        @relation(fields: [tokenAddress], references: [address])
+    token              Token?        @relation(fields: [tokenAddress], references: [address])
     /// token address
-    tokenAddress String?
+    tokenAddress       String?
     /// Agent name
-    name         String
+    name               String
     /// Agent description
-    description  String
+    description        String
     /// Chain which the agent vault is deployed
-    chain        Chain         @relation(fields: [chainId], references: [chainId])
+    chain              Chain         @relation(fields: [chainId], references: [chainId])
     /// Chain ID
-    chainId      String
+    chainId            String
     /// Base prompt
-    prompt       String
+    prompt             String
+    /// Risk level (1-5)
+    riskLevel          Int           @default(3)
     /// Created date
-    createdAt    DateTime      @default(now()) @db.Timestamp(3)
+    createdAt          DateTime      @default(now()) @db.Timestamp(3)
     /// Last updated date
-    updatedAt    DateTime      @updatedAt @db.Timestamp(3)
+    updatedAt          DateTime      @updatedAt @db.Timestamp(3)
     /// Messages
-    messages     Message[]
+    messages           Message[]
 }
 
 model AgentAccount {

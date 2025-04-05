@@ -54,8 +54,9 @@ Thumbs.db
 
 # Environment Variables
 .env
-!.env.local
 .env.*
+!.env.local
+!.env.testing
 
 # Cursor
 .cursor
