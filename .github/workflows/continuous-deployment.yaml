@@ -1,0 +1,54 @@
+name: Deploy affected projects
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚜 Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+          token: ${{ secrets.ACTION_TOKEN }}
+
+      - name: 🏠 Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.12.2
+
+      - name: Restore node_modules from cache
+        run: |
+          if [ -d "../node_modules_cache" ]; then
+              echo "Restoring node_modules from cache"
+              mv ../node_modules_cache ./node_modules
+          fi
+
+      - name: 📦 Install Dependencies
+        run: yarn install --ignore-engines --prefer-offline --frozen-lockfile --network-timeout 1000000
+
+      - name: 🔍 Set base commit hash
+        run: |
+          #!/usr/bin/env bash
+          commit=${{ github.event.before }}
+          if git branch --contains "$commit"; then
+            echo "No force push detected, continuing..."
+          else
+            # get the commit before this one
+            commit=$(git log --format="%H" -n 2 | tail -n 1)
+          fi
+          echo "BASE_COMMIT=$commit" >> $GITHUB_ENV
+
+      - name: 🔍 Display base commit
+        run: echo "$BASE_COMMIT"
+
+      - name: 🔍 Build affected
+        run: yarn build:all
+
+      - name: 🚀 Deploy affected
+        run: ./tools/scripts/railway_trigger.sh
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
