@@ -24,6 +24,7 @@
       "@libs/ui": ["libs/ui/src/index.ts"],
       "@libs/utils-client": ["libs/utils/src/client/index.ts"],
       "@libs/utils-server": ["libs/utils/src/server/index.ts"],
+      "@apps/typechains": ["apps/contracts/typechain-types/index.ts"],
       "~/.storybook/*": [".storybook/*"],
       "~/client-next/*": ["apps/client-next/*"],
       "~/prisma/*": ["libs/prisma/*"],

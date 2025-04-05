@@ -1,20 +1,17 @@
 import { openai } from "@ai-sdk/openai";
 import { getOnChainTools } from "@goat-sdk/adapter-vercel-ai";
-import { USDC, erc20 } from "@goat-sdk/plugin-erc20";
-import { ionic } from "@goat-sdk/plugin-ionic";
-import { kim } from "@goat-sdk/plugin-kim";
-import { sendETH } from "@goat-sdk/wallet-evm";
 import { viem } from "@goat-sdk/wallet-viem";
 import { Injectable } from "@nestjs/common";
 import { generateText } from "ai";
 import { createWalletClient, http } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
-import { mode } from "viem/chains";
+import { baseSepolia } from "viem/chains";
 import { ErrorMessage } from "@libs/constants";
 import type { CreateAgentInput } from "@libs/model";
 import { PrismaService } from "@libs/nestjs-core";
 import { getTokenPluginInput } from "@libs/utils-server";
 import { BlockchainService } from "../../common/blockchain/blockchain.service";
+import { agentVaultPlugin } from "../../common/plugin/vault/agent-vault.plugin";
 import { MarketService } from "../market/market.service";
 import { TokenService } from "../token/token.service";
 
@@ -52,14 +49,14 @@ export class AgentService {
     const walletClient = createWalletClient({
       account: privateKeyToAccount(agent.privateKey as `0x${string}`),
       transport: http(rpcUrl),
-      chain: mode,
+      chain: baseSepolia,
     });
-    const tokens = await this.tokenService.findTokensByChainId(agent.chainId);
-    const tokenPluginInputs = tokens.map((token) => getTokenPluginInput(token));
+    // const tokens = await this.tokenService.findTokensByChainId(agent.chainId);
+    // const tokenPluginInputs = tokens.map((token) => getTokenPluginInput(token));
 
     const onChainTools = await getOnChainTools({
       wallet: viem(walletClient),
-      plugins: [sendETH(), erc20({ tokens: tokenPluginInputs }), kim(), ionic()],
+      plugins: [agentVaultPlugin()],
     });
 
     return onChainTools;
@@ -67,13 +64,27 @@ export class AgentService {
 
   async executeAgent(agentId: string) {
     try {
-      // Get market data from Defillama
-      const marketData = await this.marketService.getMarketData();
+      // const marketData = await this.marketService.getMarketData();
+      const mockMarketData = [
+        {
+          strategyName: "Test Defi",
+          token: "TestToken",
+          apy: 5.9,
+          tvl: 1000000,
+        },
+        {
+          strategyName: "Alt Test Defi",
+          token: "TestToken",
+          apy: 10.8,
+          tvl: 800000,
+        },
+      ];
+      const mockDefaultPrompt = "Manage the vault to maximize yield. Prefer the highest apy strategy.";
+      const mockVaultAddress = "0x1c55A489B09783E7D71a864444D13816705DE2AC";
+      const prompt = this.getPrompt(mockMarketData, mockDefaultPrompt, "Test Defi", mockVaultAddress);
+      console.log(prompt);
 
-      // Create prompt with market data
-      const prompt = this.createPrompt(marketData);
       const tools = await this.getAgentOnChainTools(agentId);
-
       const result = await generateText({
         model: openai("gpt-4o-mini"),
         tools,
@@ -92,11 +103,33 @@ export class AgentService {
     }
   }
 
-  private createPrompt(marketData: any): string {
-    // TODO: Implement proper prompt creation with market data
-    return `You are an AI Agent managing a DeFi vault. Current market conditions:
-    ${JSON.stringify(marketData, null, 2)}
+  private getPrompt(marketData: any, defaultPrompt: string, currentStrategyName: string, vaultAddress: string): string {
+    return ` 
+    Current market conditions(in JSON format):
+    ${JSON.stringify(marketData)}
+
+    Vault creator request: 
+    ${defaultPrompt}
+
+    Name of the current strategy:
+    ${currentStrategyName}
+
+    =====================================================
     
-    Based on this information, analyze the market and make investment decisions to maximize yield for the vault.`;
+    You are an AI Agent managing a Agent-managed DeFi vault.
+    Your vault address is "${vaultAddress}".
+    Based on this information above, analyze the market and determine to set a new strategy or keep the current strategy.
+    You can get the list of strategy by calling the tool "agent_vault_get_strategy_and_addresses".
+    To set a new strategy, you need to call the tool "agent_vault_set_new_strategy".
+    If you decide to keep the current strategy, return a reason why.
+    `;
+  }
+
+  async getAgent(agentId: string) {
+    return this.prisma.agent.findUnique({ where: { id: agentId } });
+  }
+
+  async findAllAgents() {
+    return this.prisma.agent.findMany();
   }
 }

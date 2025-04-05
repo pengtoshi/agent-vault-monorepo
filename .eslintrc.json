@@ -91,11 +91,7 @@
         "@nx/enforce-module-boundaries": [
           1,
           {
-            "allow": [
-              "~/client-next/**",
-              "~/server-nest/**",
-              "~/ui/**"
-            ],
+            "allow": ["~/client-next/**", "~/server-nest/**", "~/ui/**", "@apps/typechains"],
             "depConstraints": [
               {
                 "sourceTag": "scope:shared",
