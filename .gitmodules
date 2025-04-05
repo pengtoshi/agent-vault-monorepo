@@ -1,0 +1,3 @@
+[submodule "apps/contracts"]
+	path = apps/contracts
+	url = https://github.com/pengtoshi/agent-vault-contract
