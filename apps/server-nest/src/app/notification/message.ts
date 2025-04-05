@@ -3,6 +3,6 @@ export const escapeMarkdownV2 = (text: string) => {
 };
 
 export const getStrategyChangedMessage = (): string => {
-  const message = "Strategy has been changed. Please check the website for more details.";
-  return escapeMarkdownV2(message);
+  const clientUrl = process.env.CLIENT_APP_URL || "http://localhost:4200";
+  return `Strategy has been changed. Please check the [website](${clientUrl}) for more details.`;
 };

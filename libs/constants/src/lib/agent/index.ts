@@ -2,21 +2,21 @@ export const STRATEGY_INFOS: Record<number, { strategyName: string; strategyAddr
   31: [
     {
       strategyName: "TSovryn",
-      strategyAddress: "0x88d4dBE8aA4fdE0BF4a1Ac640DD34352734E763a",
+      strategyAddress: "0xE740929032780466f962FD2d8a1353AC52E3A622",
     },
     {
       strategyName: "TBeefy",
-      strategyAddress: "0xBb69A1fCb1b530c4f5e8E3598d309fb50fbeA3C8",
+      strategyAddress: "0xbEcC4a216f8c7D742AF2B2d9D686d1aA941DFcA2",
     },
   ],
   44787: [
     {
       strategyName: "TstCELO",
-      strategyAddress: "0x88d4dBE8aA4fdE0BF4a1Ac640DD34352734E763a",
+      strategyAddress: "0x0e68e946f4F2141A8AE0b3C8851140b50D71Ecbd",
     },
     {
       strategyName: "TUniswap",
-      strategyAddress: "0xBb69A1fCb1b530c4f5e8E3598d309fb50fbeA3C8",
+      strategyAddress: "0x9DB4070b99Fd5193097Ff19DC12859D6fB6bAdC4",
     },
   ],
   545: [
@@ -37,6 +37,22 @@ export const STRATEGY_INFOS: Record<number, { strategyName: string; strategyAddr
     {
       strategyName: "TElara",
       strategyAddress: "0x519B51aC32ec0857de0AffECa3F22B3C9F8E0cDD",
+    },
+  ],
+  80002: [
+    {
+      strategyName: "TAave",
+      strategyAddress: "0x519B51aC32ec0857de0AffECa3F22B3C9F8E0cDD",
+    },
+  ],
+  84532: [
+    {
+      strategyName: "TMorpho",
+      strategyAddress: "0x9F9dc9ef7523BDb4c2574df2A6D9Fb53dfADF385",
+    },
+    {
+      strategyName: "TBeefy",
+      strategyAddress: "0xfe667E95E4f85540F181f6Fc6ED86dC742D266B4",
     },
   ],
 };

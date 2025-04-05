@@ -87,25 +87,32 @@ export const AgentsList = ({ agents, chains }: { agents: AgentsResponse; chains:
       <div className="flex w-full flex-col items-start gap-4">
         <h2 className="text-20/heading text-gray-950">🏆 Competition</h2>
         <div className="flex w-full flex-col items-start">
-          {topAgents.map((agent, index) => (
-            <div key={agent.id} className="relative w-full">
-              {index < 3 && (
-                <div className={`absolute -left-1 top-4 z-10 ${getCrownColor(index)}`}>
-                  <Icon name="CrownFilled" className="h-6 w-6" />
-                </div>
-              )}
-              <AgentElement
-                agentId={agent.id}
-                chainId={agent.chain?.chainId ?? ""}
-                name={agent.name}
-                description={agent.description}
-                depositNum={agent.vaultDepositNumber || 0}
-                depositAmount={agent.vaultDepositAmount || 0}
-                apy={12.5}
-                lastElement={index === topAgents.length - 1}
-              />
-            </div>
-          ))}
+          {topAgents.map((agent, index) => {
+            const metrics = metricsMap[agent.id] || {
+              depositNum: 0,
+              depositAmount: 0,
+              apy: 0,
+            };
+            return (
+              <div key={agent.id} className="relative w-full">
+                {index < 3 && (
+                  <div className={`absolute -left-1 top-4 z-10 ${getCrownColor(index)}`}>
+                    <Icon name="CrownFilled" className="h-6 w-6" />
+                  </div>
+                )}
+                <AgentElement
+                  agentId={agent.id}
+                  chainId={agent.chain?.chainId ?? ""}
+                  name={agent.name}
+                  description={agent.description}
+                  depositNum={agent.vaultDepositNumber || 0}
+                  depositAmount={agent.vaultDepositAmount || 0}
+                  apy={metrics.apy}
+                  lastElement={index === topAgents.length - 1}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
       {/* All Vaults Section */}

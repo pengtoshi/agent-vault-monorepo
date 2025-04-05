@@ -1,5 +1,7 @@
 import type { SVGProps } from "react";
 import { ReactComponent as Agent } from "~/ui/public/icons/agent.svg";
+import { ReactComponent as Bell } from "~/ui/public/icons/bell.svg";
+import { ReactComponent as BellFilled } from "~/ui/public/icons/bell_filled.svg";
 import { ReactComponent as Check } from "~/ui/public/icons/check.svg";
 import { ReactComponent as CheckThick } from "~/ui/public/icons/check_thick.svg";
 import { ReactComponent as ChevronDown } from "~/ui/public/icons/chevron_down.svg";
@@ -32,6 +34,8 @@ import { ReactComponent as Search } from "~/ui/public/icons/search.svg";
 
 export const IconVariants = {
   Agent,
+  Bell,
+  BellFilled,
   Check,
   CheckThick,
   ChevronDown,

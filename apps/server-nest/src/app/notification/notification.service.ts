@@ -21,14 +21,17 @@ export class NotificationService {
       this.logger.error("Telegram configuration is incomplete");
       return;
     }
-    this.bot = new TelegramBot(botToken);
+    this.bot = new TelegramBot(botToken, { polling: true });
+    this.bot.on("message", async (msg: TelegramBot.Message) => {
+      await this.handleMessageReceived(msg);
+    });
   }
 
   async handleMessageReceived(msg: TelegramBot.Message): Promise<void> {
     const chatId = msg.chat.id.toString();
     const { text } = msg;
     if (text === "/start") {
-      const telegramId = msg.from?.id;
+      const telegramId = msg.from?.id.toString();
       if (!telegramId) {
         throw new Error(ErrorMessage.MSG_TELEGRAM_ID_NOT_FOUND);
       }
@@ -44,7 +47,7 @@ export class NotificationService {
     try {
       this.logger.log(`Webhook event received: ${webhookData.eventType}`);
 
-      if (webhookData.eventType === "TRANSACTION") {
+      if (webhookData.eventType === "LOG") {
         await this.processStrategyChangedEvent();
       } else {
         this.logger.warn(`Unsupported event type: ${webhookData.eventType}`);
@@ -55,7 +58,7 @@ export class NotificationService {
   }
 
   private async processStrategyChangedEvent(): Promise<void> {
-    const subscribers = await this.prisma.subscriber.findMany();
+    const subscribers = await this.prisma.extended.subscriber.findMany();
     await Promise.all(
       subscribers.map(async (subscriber) => {
         const message = getStrategyChangedMessage();

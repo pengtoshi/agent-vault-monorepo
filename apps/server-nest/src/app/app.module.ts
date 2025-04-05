@@ -16,6 +16,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { ChainModule } from "./chain/chain.module";
 import { MarketModule } from "./market/market.module";
+import { NotificationModule } from "./notification/notification.module";
 import { TokenModule } from "./token/token.module";
 import { UserModule } from "./user/user.module";
 import { BlockchainModule } from "../common/blockchain/blockchain.module";
@@ -85,6 +86,7 @@ import { JwtStrategy } from "../common/strategies/jwt.strategy";
 
     // App
     PrismaModule,
+    NotificationModule,
     TokenModule,
     UserModule,
     AgentModule,

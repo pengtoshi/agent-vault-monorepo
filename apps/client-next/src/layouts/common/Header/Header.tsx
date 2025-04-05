@@ -62,7 +62,7 @@ export const Header = ({
             {!hideBackButton && <IconButton onClick={handleBack} name="ChevronLeft" size={24} />}
             {!hideLogo && (
               <Link href="/">
-                <div className="h-8 w-20 rounded-md bg-red-500" />
+                <span className="text-24/heading italic text-primary-500">🗡️ Yield Royale</span>
               </Link>
             )}
           </div>

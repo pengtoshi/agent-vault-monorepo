@@ -1,3 +1,4 @@
+import { ChainId } from "@libs/constants";
 import type { AgentResponse } from "@libs/graphql";
 import { IconButton, NetworkIcon } from "@libs/ui";
 import { formatDate } from "@libs/utils-client";
@@ -9,22 +10,34 @@ export interface AgentInfoCardProps {
 export const AgentInfoCard = ({ agentInfo }: AgentInfoCardProps) => {
   return (
     <div className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100">
-            <IconButton name="Agent" size={24} iconClassName="text-primary-600" />
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <h2 className="text-18/heading text-gray-950">{agentInfo.name}</h2>
-            <div className="flex items-center gap-1">
+      <div className="flex w-full flex-col gap-2">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-100">
+              <IconButton name="Agent" size={24} iconClassName="text-primary-600" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <h2 className="text-18/heading text-gray-950">{agentInfo.name}</h2>
               <div className="flex items-center gap-1">
-                <NetworkIcon chainId={agentInfo.chain?.chainId || ""} size={12} />
-                <span className="text-12/body text-gray-500">{agentInfo.chain?.name || "Unknown Network"}</span>
+                <div className="flex items-center gap-1">
+                  <NetworkIcon chainId={agentInfo.chain?.chainId || ""} size={12} />
+                  <span className="text-12/body text-gray-500">{agentInfo.chain?.name || "Unknown Network"}</span>
+                </div>
+                <span className="text-12/body text-gray-500">•</span>
+                <span className="text-12/body text-gray-500">Created {formatDate(agentInfo.createdAt)}</span>
               </div>
-              <span className="text-12/body text-gray-500">•</span>
-              <span className="text-12/body text-gray-500">Created {formatDate(agentInfo.createdAt)}</span>
             </div>
           </div>
+          {Number(agentInfo.chainId) === ChainId.Base && (
+            <IconButton
+              name="Bell"
+              size={20}
+              onClick={() => {
+                window.open(`https://t.me/vault_royale_noti_bot`, "_blank");
+              }}
+              iconClassName="text-gray-600"
+            />
+          )}
         </div>
         <p className="text-14/body text-gray-700">{agentInfo.description}</p>
         {/* Contract Address Information */}
