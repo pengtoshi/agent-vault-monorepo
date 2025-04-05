@@ -32,5 +32,6 @@ export * from "./lib/server-nest/user/verify-user.input";
 
 // Agent
 export * from "./lib/server-nest/agent/create-agent.input";
+export * from "./lib/server-nest/agent/deposit-agent.input";
 export * from "./lib/server-nest/agent/agent.model";
 export * from "./lib/server-nest/agent/message.model";

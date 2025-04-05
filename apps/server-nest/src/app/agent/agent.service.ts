@@ -11,7 +11,7 @@ import Redis from "ioredis";
 import { createWalletClient, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { ErrorMessage, VIEM_CHAINS } from "@libs/constants";
-import type { CreateAgentInput } from "@libs/model";
+import type { CreateAgentInput, DepositAgentInput } from "@libs/model";
 import { PrismaService } from "@libs/nestjs-core";
 import type { Prisma } from "~/prisma/generated/client";
 import { getExecutionPrompt } from "./prompt";
@@ -53,6 +53,27 @@ export class AgentService {
     });
   }
 
+  async depositAgent(depositAgentInput: DepositAgentInput) {
+    const { agentId, depositAmount } = depositAgentInput;
+
+    const agentInfo = await this.prisma.extended.agent.findUnique({
+      where: { id: agentId },
+    });
+    if (!agentInfo) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT);
+
+    return this.prisma.agent.update({
+      where: { id: agentId },
+      data: {
+        vaultDepositNumber: {
+          increment: 1,
+        },
+        vaultDepositAmount: {
+          increment: depositAmount,
+        },
+      },
+    });
+  }
+
   async getAgentOnChainTools(chainId: string, privateKey: string) {
     const rpcUrl = this.blockchainService.getRpcUrl(chainId);
     const walletClient = createWalletClient({
@@ -80,11 +101,11 @@ export class AgentService {
     });
     if (!agentAccountInfo) throw new Error(ErrorMessage.MSG_NOT_FOUND_AGENT_ACCOUNT);
 
-    const { prompt: defaultPrompt, vaultAddress, chainId } = agentInfo;
+    const { prompt: defaultPrompt, vaultAddress, chainId, riskLevel } = agentInfo;
     const { privateKey } = agentAccountInfo;
 
     const marketData = await this.marketService.getMockMarketData(chainId);
-    const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress);
+    const prompt = getExecutionPrompt(marketData, defaultPrompt, vaultAddress, riskLevel);
     const tools = await this.getAgentOnChainTools(chainId, privateKey);
 
     const result = await generateText({

@@ -1,5 +1,5 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { AgentInfo, ChainInfo, CreateAgentInput, MessageInfo, StrategyInfo } from "@libs/model";
+import { AgentInfo, ChainInfo, CreateAgentInput, DepositAgentInput, MessageInfo } from "@libs/model";
 import { AgentService } from "./agent.service";
 
 @Resolver(() => AgentInfo)
@@ -9,6 +9,11 @@ export class AgentResolver {
   @Mutation(() => AgentInfo)
   async createAgent(@Args("input") agentInput: CreateAgentInput) {
     return this.agentService.createAgent(agentInput);
+  }
+
+  @Mutation(() => AgentInfo)
+  async depositAgent(@Args("input") depositAgentInput: DepositAgentInput) {
+    return this.agentService.depositAgent(depositAgentInput);
   }
 
   @Query(() => AgentInfo)

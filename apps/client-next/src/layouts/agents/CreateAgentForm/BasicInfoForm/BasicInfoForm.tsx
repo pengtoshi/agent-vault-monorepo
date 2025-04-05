@@ -16,8 +16,8 @@ export const BasicInfoForm = ({ chains }: BasicInfoFormProps) => {
     watch,
   } = useFormContext();
 
-  const { name, description, prompt, chainId } = watch();
-  const isValid = Boolean(name && description && prompt && chainId);
+  const { name, description, prompt, chainId, riskLevel } = watch();
+  const isValid = Boolean(name && description && prompt && chainId && riskLevel);
 
   const handleNetworkChange = async (newChainName: string) => {
     const newChainId = chains.find((chain) => chain.name === newChainName)?.chainId;
@@ -25,6 +25,8 @@ export const BasicInfoForm = ({ chains }: BasicInfoFormProps) => {
     setValue("chainId", newChainId);
     switchChain({ chainId: Number(newChainId) });
   };
+
+  const riskLevelOptions = ["1", "2", "3", "4", "5"];
 
   return (
     <div className="flex h-full w-full flex-col justify-between">
@@ -59,6 +61,18 @@ export const BasicInfoForm = ({ chains }: BasicInfoFormProps) => {
             options={chains.map((chain) => chain.name)}
             onSelect={handleNetworkChange}
             error={errors.chainId?.message as string}
+          />
+        </div>
+        <div className="flex flex-col items-start gap-1.5">
+          <Label label="Risk Level" required />
+          <span className="text-12/body text-gray-600">
+            If the risk level is high, the agent will take more risk and vice versa.
+          </span>
+          <Dropdown
+            {...register("riskLevel", { required: "Risk level is required." })}
+            options={riskLevelOptions}
+            onSelect={(value) => setValue("riskLevel", value)}
+            error={errors.riskLevel?.message as string}
           />
         </div>
       </div>

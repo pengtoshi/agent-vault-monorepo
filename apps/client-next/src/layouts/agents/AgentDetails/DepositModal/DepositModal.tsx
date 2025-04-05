@@ -2,12 +2,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import type { Address } from "viem";
 import { useAccount, useBalance, useWriteContract } from "wagmi";
+import { useDepositAgent } from "@libs/graphql";
 import { Button, Modal, Slider } from "@libs/ui";
 import type { ModalAction } from "@libs/ui";
 import { formatNumber } from "@libs/utils-client";
 import { AgentVault__factory, ERC20__factory } from "@apps/typechains";
 
 interface DepositModalProps {
+  agentId: string;
   isOpen: boolean;
   onClose: () => void;
   tokenAddress: Address;
@@ -24,11 +26,12 @@ const TransactionStateText: Record<TransactionState, string> = {
   completed: "Completed",
 };
 
-export const DepositModal = ({ isOpen, onClose, tokenAddress, vaultAddress }: DepositModalProps) => {
+export const DepositModal = ({ agentId, isOpen, onClose, tokenAddress, vaultAddress }: DepositModalProps) => {
   const router = useRouter();
   const { address } = useAccount();
   const [amount, setAmount] = useState(0);
   const [txState, setTxState] = useState<TransactionState>("default");
+  const [depositAgent] = useDepositAgent();
 
   const { data: balance } = useBalance({
     address,
@@ -72,6 +75,17 @@ export const DepositModal = ({ isOpen, onClose, tokenAddress, vaultAddress }: De
         functionName: "deposit",
         args: [BigInt(amount * 10 ** balance.decimals), address],
       });
+
+      // GraphQL mutation 실행
+      await depositAgent({
+        variables: {
+          input: {
+            agentId,
+            depositAmount: amount,
+          },
+        },
+      });
+
       setTxState("completed");
       router.push(`/mypage`);
     } catch (error) {

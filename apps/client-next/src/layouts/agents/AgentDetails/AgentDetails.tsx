@@ -76,6 +76,7 @@ export const AgentDetails = ({ agentInfo }: { agentInfo: AgentResponse }) => {
         </Button>
       </div>
       <DepositModal
+        agentId={agentInfo.id}
         isOpen={isDepositModalOpen}
         onClose={() => setIsDepositModalOpen(false)}
         tokenAddress={agentInfo.tokenAddress as Address}

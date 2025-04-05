@@ -148,8 +148,10 @@ model Message {
 }
 
 model Strategy {
+    /// id
+    id        String   @id @default(cuid())
     /// Strategy address
-    address   String   @id @unique
+    address   String
     /// Chain
     chain     Chain    @relation(fields: [chainId], references: [chainId])
     /// Chain ID
@@ -162,6 +164,8 @@ model Strategy {
     createdAt DateTime @default(now()) @db.Timestamp(3)
     /// Last updated date
     updatedAt DateTime @updatedAt @db.Timestamp(3)
+
+    @@unique([address, chainId])
 }
 
 enum ROLE {
