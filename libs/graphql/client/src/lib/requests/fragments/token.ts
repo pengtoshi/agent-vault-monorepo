@@ -4,6 +4,16 @@ export const tokenFragment = gql(/* GraphQL */ `
   fragment Chain on ChainInfo {
     chainId
     name
+    blockExplorerUrl
+    createdAt
+    updatedAt
+  }
+
+  fragment Strategy on StrategyInfo {
+    address
+    chainId
+    name
+    default
     createdAt
     updatedAt
   }

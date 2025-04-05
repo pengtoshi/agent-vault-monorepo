@@ -37,43 +37,49 @@ model AuthToken {
 }
 
 model Token {
-    /// 아이디
+    /// ID
     id        String   @id @default(cuid())
-    /// 토큰 주소
+    /// Address
     address   String   @unique
-    /// 체인
+    /// Chain
     chain     Chain    @relation(fields: [chainId], references: [chainId])
-    /// 체인 ID
-    chainId   Int
-    /// 이름
-    name      String
-    /// 심볼
-    symbol    String
-    /// 자리수
-    decimals  Int
-    /// 로고 URL
-    logoUrl   String
-    /// 가격
-    price     Float
-    /// 생성 일시
-    createdAt DateTime @default(now()) @db.Timestamp(3)
-    /// 수정 일시
-    updatedAt DateTime @updatedAt @db.Timestamp(3)
-}
-
-model Chain {
     /// Chain ID
-    chainId   Int      @id @unique
-    /// Chain name
+    chainId   String
+    /// Name
     name      String
+    /// Symbol
+    symbol    String
+    /// Decimals
+    decimals  Int
+    /// Logo URL
+    logoUrl   String?
+    /// Price
+    price     Float?
     /// Created date
     createdAt DateTime @default(now()) @db.Timestamp(3)
     /// Last updated date
     updatedAt DateTime @updatedAt @db.Timestamp(3)
-    /// Tokens
-    tokens    Token[]
     /// Agents
     agents    Agent[]
+}
+
+model Chain {
+    /// Chain ID
+    chainId          String     @id @unique
+    /// Chain name
+    name             String
+    /// Chain block explorer URL
+    blockExplorerUrl String?
+    /// Created date
+    createdAt        DateTime   @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt        DateTime   @updatedAt @db.Timestamp(3)
+    /// Tokens
+    tokens           Token[]
+    /// Agents
+    agents           Agent[]
+    /// Strategies
+    strategies       Strategy[]
 }
 
 model Agent {
@@ -85,6 +91,10 @@ model Agent {
     account      AgentAccount?
     /// Agent vault address
     vaultAddress String        @unique
+    /// token
+    token        Token?        @relation(fields: [tokenAddress], references: [address])
+    /// token address
+    tokenAddress String?
     /// Agent name
     name         String
     /// Agent description
@@ -92,7 +102,7 @@ model Agent {
     /// Chain which the agent vault is deployed
     chain        Chain         @relation(fields: [chainId], references: [chainId])
     /// Chain ID
-    chainId      Int
+    chainId      String
     /// Base prompt
     prompt       String
     /// Created date
@@ -125,6 +135,23 @@ model Message {
     agent     Agent    @relation(fields: [agentId], references: [id])
     /// Agent ID
     agentId   String
+    /// Created date
+    createdAt DateTime @default(now()) @db.Timestamp(3)
+    /// Last updated date
+    updatedAt DateTime @updatedAt @db.Timestamp(3)
+}
+
+model Strategy {
+    /// Strategy address
+    address   String   @id @unique
+    /// Chain
+    chain     Chain    @relation(fields: [chainId], references: [chainId])
+    /// Chain ID
+    chainId   String
+    /// Name
+    name      String
+    /// Default
+    default   Boolean  @default(false)
     /// Created date
     createdAt DateTime @default(now()) @db.Timestamp(3)
     /// Last updated date

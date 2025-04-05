@@ -6,6 +6,9 @@ export const findAllChains = gql(/* GraphQL */ `
   query FindAllChains {
     findAllChains {
       ...Chain
+      strategies {
+        ...Strategy
+      }
     }
   }
 `);

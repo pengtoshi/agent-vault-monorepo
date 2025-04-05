@@ -8,6 +8,9 @@ export class ChainInfo {
   @Field(() => String, { nullable: false, description: "Chain name" })
   name!: string;
 
+  @Field(() => String, { nullable: false, description: "Chain block explorer URL" })
+  blockExplorerUrl!: string;
+
   @Field(() => Date, { nullable: false, description: "Created date" })
   createdAt!: Date;
 

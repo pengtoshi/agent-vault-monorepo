@@ -12,6 +12,15 @@ export const formatNumber = (number: number): string => {
   return formatter.format(number);
 };
 
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
+
 export const formatStringToPascalCase = (str: string): string => {
   return str
     .replace(/(\w)(\w*)/g, function wordToPascalCase(_: string, firstChar: string, rest: string): string {
@@ -36,4 +45,23 @@ export const formatNumberToFinancialUnit = (number: number): string => {
     return `${sign}${(number / 1000).toFixed(1)}K`;
   }
   return `${sign}${number.toFixed(1)}`;
+};
+
+export const formatTimeAgo = (dateString: string): string => {
+  const now = new Date();
+  const date = new Date(dateString);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  const minutes = Math.floor(diffInSeconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (minutes < 1) return "less than 1 minute ago";
+  if (hours < 1) return `${minutes} minutes ago`;
+  if (days < 1) return `${hours} hours ago`;
+  if (months < 1) return `${days} days ago`;
+  if (years < 1) return `${months} months ago`;
+  return `${years} years ago`;
 };

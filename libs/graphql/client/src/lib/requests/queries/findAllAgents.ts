@@ -6,6 +6,9 @@ export const findAllAgents = gql(/* GraphQL */ `
   query FindAllAgents {
     findAllAgents {
       ...Agent
+      chain {
+        ...Chain
+      }
     }
   }
 `);

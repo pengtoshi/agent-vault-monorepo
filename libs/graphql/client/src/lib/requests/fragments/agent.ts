@@ -5,6 +5,7 @@ export const agentFragment = gql(/* GraphQL */ `
     id
     address
     vaultAddress
+    tokenAddress
     name
     description
     chainId

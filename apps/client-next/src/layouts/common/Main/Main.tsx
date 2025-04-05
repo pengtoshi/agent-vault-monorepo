@@ -11,6 +11,15 @@ interface MainProps {
   children: React.ReactNode;
 }
 
+export const BottomBlur = () => {
+  return (
+    <>
+      <div className="fixed bottom-[10%] left-1/2 right-0 z-10 h-16 w-full max-w-[600px] -translate-x-1/2 bg-gradient-to-t from-gray-50 to-gray-50/20" />
+      <div className="fixed bottom-0 left-1/2 right-0 z-10 h-[10%] w-full max-w-[600px] -translate-x-1/2 bg-gray-50" />
+    </>
+  );
+};
+
 export const Main = ({
   meta,
   header = <Header />,
@@ -24,7 +33,7 @@ export const Main = ({
     <div className="flex min-h-screen w-full justify-center">
       <div
         className={clsx(
-          "flex min-h-screen w-full max-w-[600px] flex-col items-center justify-start bg-gray-50",
+          "relative flex min-h-screen w-full max-w-[600px] flex-col items-center justify-start bg-gray-50",
           className,
         )}
         {...props}
@@ -34,11 +43,11 @@ export const Main = ({
         {/* Header */}
         {!hideHeader && header}
         {/* Main Content */}
-        <div className="pb-safe-bottom flex w-full max-w-[600px] flex-1 flex-col items-stretch justify-start px-4 py-6">
+        <div className="pb-safe-bottom flex w-full max-w-[600px] flex-1 flex-col items-stretch justify-start gap-6 px-4 py-6">
           {children}
         </div>
         {/* Bottom Navigation */}
-        {!hideBottomNavigation && <BottomNavigation />}
+        {!hideBottomNavigation ? <BottomNavigation /> : <BottomBlur />}
       </div>
     </div>
   );

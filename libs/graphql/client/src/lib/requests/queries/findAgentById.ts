@@ -6,6 +6,9 @@ export const findAgentById = gql(/* GraphQL */ `
   query FindAgentById($id: String!) {
     findAgentById(id: $id) {
       ...Agent
+      chain {
+        ...Chain
+      }
       messages {
         ...Message
       }

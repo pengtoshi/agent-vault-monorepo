@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { Type } from "class-transformer";
 import { IsEthereumAddress, IsInt, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
-import { ChainInput } from "./chain.input";
+import { ChainInput } from "../chain/chain.input";
 
 @InputType()
 export class TokenInput {

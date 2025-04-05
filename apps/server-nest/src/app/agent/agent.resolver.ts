@@ -1,5 +1,5 @@
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { AgentInfo, ChainInfo, CreateAgentInput, MessageInfo } from "@libs/model";
+import { AgentInfo, ChainInfo, CreateAgentInput, MessageInfo, StrategyInfo } from "@libs/model";
 import { AgentService } from "./agent.service";
 
 @Resolver(() => AgentInfo)

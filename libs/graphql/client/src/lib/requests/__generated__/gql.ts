@@ -14,29 +14,29 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n": typeof types.AgentFragmentDoc,
-    "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n": typeof types.ChainFragmentDoc,
+    "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    tokenAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n": typeof types.AgentFragmentDoc,
+    "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    blockExplorerUrl\n    createdAt\n    updatedAt\n  }\n\n  fragment Strategy on StrategyInfo {\n    address\n    chainId\n    name\n    default\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n": typeof types.ChainFragmentDoc,
     "\n  fragment User on UserInfo {\n    address\n    role\n    status\n    nonce\n    createdAt\n    updatedAt\n  }\n": typeof types.UserFragmentDoc,
     "\n  mutation CreateAgent($input: CreateAgentInput!) {\n    createAgent(input: $input) {\n      ...Agent\n    }\n  }\n": typeof types.CreateAgentDocument,
     "\n  mutation RefreshTokens($input: AuthTokenInput!) {\n    refreshTokens(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": typeof types.RefreshTokensDocument,
     "\n  mutation RequestLogin($input: UserInput!) {\n    requestLogin(input: $input) {\n      ...User\n    }\n  }\n": typeof types.RequestLoginDocument,
     "\n  mutation VerifyLogin($input: VerifyUserInput!) {\n    verifyLogin(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": typeof types.VerifyLoginDocument,
-    "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      messages {\n        ...Message\n      }\n    }\n  }\n": typeof types.FindAgentByIdDocument,
-    "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n    }\n  }\n": typeof types.FindAllAgentsDocument,
-    "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n    }\n  }\n": typeof types.FindAllChainsDocument,
+    "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      chain {\n        ...Chain\n      }\n      messages {\n        ...Message\n      }\n    }\n  }\n": typeof types.FindAgentByIdDocument,
+    "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n      chain {\n        ...Chain\n      }\n    }\n  }\n": typeof types.FindAllAgentsDocument,
+    "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n      strategies {\n        ...Strategy\n      }\n    }\n  }\n": typeof types.FindAllChainsDocument,
     "\n  query FindUser {\n    findUser {\n      ...User\n    }\n  }\n": typeof types.FindUserDocument,
 };
 const documents: Documents = {
-    "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n": types.AgentFragmentDoc,
-    "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n": types.ChainFragmentDoc,
+    "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    tokenAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n": types.AgentFragmentDoc,
+    "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    blockExplorerUrl\n    createdAt\n    updatedAt\n  }\n\n  fragment Strategy on StrategyInfo {\n    address\n    chainId\n    name\n    default\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n": types.ChainFragmentDoc,
     "\n  fragment User on UserInfo {\n    address\n    role\n    status\n    nonce\n    createdAt\n    updatedAt\n  }\n": types.UserFragmentDoc,
     "\n  mutation CreateAgent($input: CreateAgentInput!) {\n    createAgent(input: $input) {\n      ...Agent\n    }\n  }\n": types.CreateAgentDocument,
     "\n  mutation RefreshTokens($input: AuthTokenInput!) {\n    refreshTokens(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.RefreshTokensDocument,
     "\n  mutation RequestLogin($input: UserInput!) {\n    requestLogin(input: $input) {\n      ...User\n    }\n  }\n": types.RequestLoginDocument,
     "\n  mutation VerifyLogin($input: VerifyUserInput!) {\n    verifyLogin(input: $input) {\n      accessToken\n      refreshToken\n    }\n  }\n": types.VerifyLoginDocument,
-    "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      messages {\n        ...Message\n      }\n    }\n  }\n": types.FindAgentByIdDocument,
-    "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n    }\n  }\n": types.FindAllAgentsDocument,
-    "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n    }\n  }\n": types.FindAllChainsDocument,
+    "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      chain {\n        ...Chain\n      }\n      messages {\n        ...Message\n      }\n    }\n  }\n": types.FindAgentByIdDocument,
+    "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n      chain {\n        ...Chain\n      }\n    }\n  }\n": types.FindAllAgentsDocument,
+    "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n      strategies {\n        ...Strategy\n      }\n    }\n  }\n": types.FindAllChainsDocument,
     "\n  query FindUser {\n    findUser {\n      ...User\n    }\n  }\n": types.FindUserDocument,
 };
 
@@ -57,11 +57,11 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n"];
+export function gql(source: "\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    tokenAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment Agent on AgentInfo {\n    id\n    address\n    vaultAddress\n    tokenAddress\n    name\n    description\n    chainId\n    createdAt\n    updatedAt\n  }\n\n  fragment Message on MessageInfo {\n    id\n    content\n    createdAt\n    updatedAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n"];
+export function gql(source: "\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    blockExplorerUrl\n    createdAt\n    updatedAt\n  }\n\n  fragment Strategy on StrategyInfo {\n    address\n    chainId\n    name\n    default\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment Chain on ChainInfo {\n    chainId\n    name\n    blockExplorerUrl\n    createdAt\n    updatedAt\n  }\n\n  fragment Strategy on StrategyInfo {\n    address\n    chainId\n    name\n    default\n    createdAt\n    updatedAt\n  }\n\n  fragment Token on TokenInfo {\n    id\n    address\n    chainId\n    chain {\n      ...Chain\n    }\n    name\n    symbol\n    decimals\n    logoUrl\n    price\n    createdAt\n    updatedAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -85,15 +85,15 @@ export function gql(source: "\n  mutation VerifyLogin($input: VerifyUserInput!) 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      messages {\n        ...Message\n      }\n    }\n  }\n"): (typeof documents)["\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      messages {\n        ...Message\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      chain {\n        ...Chain\n      }\n      messages {\n        ...Message\n      }\n    }\n  }\n"): (typeof documents)["\n  query FindAgentById($id: String!) {\n    findAgentById(id: $id) {\n      ...Agent\n      chain {\n        ...Chain\n      }\n      messages {\n        ...Message\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n    }\n  }\n"): (typeof documents)["\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n    }\n  }\n"];
+export function gql(source: "\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n      chain {\n        ...Chain\n      }\n    }\n  }\n"): (typeof documents)["\n  query FindAllAgents {\n    findAllAgents {\n      ...Agent\n      chain {\n        ...Chain\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n    }\n  }\n"): (typeof documents)["\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n    }\n  }\n"];
+export function gql(source: "\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n      strategies {\n        ...Strategy\n      }\n    }\n  }\n"): (typeof documents)["\n  query FindAllChains {\n    findAllChains {\n      ...Chain\n      strategies {\n        ...Strategy\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

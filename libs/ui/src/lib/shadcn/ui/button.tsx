@@ -17,8 +17,8 @@ const buttonVariants = cva(
       },
       size: {
         small: "h-8 px-4 text-14/button gap-1",
-        medium: "h-10 px-5 text-14/button gap-1.5",
-        large: "h-12 px-6 text-16/button gap-1.5",
+        medium: "h-12 px-5 text-14/button gap-1.5",
+        large: "h-16 px-6 text-16/button gap-1.5",
       },
     },
     defaultVariants: {

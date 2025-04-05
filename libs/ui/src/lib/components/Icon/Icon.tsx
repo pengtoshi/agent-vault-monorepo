@@ -21,6 +21,7 @@ import { ReactComponent as Close } from "~/ui/public/icons/close.svg";
 import { ReactComponent as CloseThick } from "~/ui/public/icons/close_thick.svg";
 import { ReactComponent as Dot } from "~/ui/public/icons/dot.svg";
 import { ReactComponent as Download } from "~/ui/public/icons/download.svg";
+import { ReactComponent as ExternalLink } from "~/ui/public/icons/external_link.svg";
 import { ReactComponent as Home } from "~/ui/public/icons/home.svg";
 import { ReactComponent as HomeFilled } from "~/ui/public/icons/home_filled.svg";
 import { ReactComponent as Person } from "~/ui/public/icons/person.svg";
@@ -50,6 +51,7 @@ export const IconVariants = {
   CloseThick,
   Dot,
   Download,
+  ExternalLink,
   Home,
   HomeFilled,
   Person,

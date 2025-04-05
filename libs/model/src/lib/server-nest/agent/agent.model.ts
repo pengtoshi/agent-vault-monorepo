@@ -11,14 +11,17 @@ export class AgentInfo {
   @Field(() => String, { nullable: false, description: "Agent vault address" })
   vaultAddress!: string;
 
+  @Field(() => String, { nullable: false, description: "Agent token address" })
+  tokenAddress!: string;
+
   @Field(() => String, { nullable: false, description: "Agent name" })
   name!: string;
 
   @Field(() => String, { nullable: false, description: "Agent description" })
   description!: string;
 
-  @Field(() => Int, { nullable: false, description: "Chain ID" })
-  chainId!: number;
+  @Field(() => String, { nullable: false, description: "Chain ID" })
+  chainId!: string;
 
   @Field(() => String, { nullable: false, description: "Agent prompt" })
   prompt!: string;

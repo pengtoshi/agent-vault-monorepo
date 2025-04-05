@@ -8,8 +8,8 @@ export class TokenInfo {
   @Field(() => String, { nullable: false, description: "토큰 주소" })
   address!: string;
 
-  @Field(() => Int, { nullable: false, description: "체인 ID" })
-  chainId!: number;
+  @Field(() => String, { nullable: false, description: "체인 ID" })
+  chainId!: string;
 
   @Field(() => String, { nullable: false, description: "이름" })
   name!: string;

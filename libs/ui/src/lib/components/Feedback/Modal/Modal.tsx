@@ -1,10 +1,10 @@
 import clsx from "clsx";
+import type { UIProps } from "../../../props";
 import { Dialog, DialogClose, DialogContent, DialogTrigger } from "../../../shadcn";
 import { Button } from "../../Input/Button/Button";
 
-export interface ModalAction {
+export interface ModalAction extends UIProps.Button {
   label: string;
-  onClick: () => void;
 }
 
 export interface ModalProps extends React.ComponentProps<typeof Dialog> {
@@ -27,6 +27,7 @@ export const Modal = ({
   actionsDirection = "row",
   closeButton = true,
   closeText = "Close",
+  children,
   ...props
 }: ModalProps) => {
   return (
@@ -39,6 +40,7 @@ export const Modal = ({
             {description && <span className="text-14/body text-gray-600">{description}</span>}
           </div>
         </div>
+        {children}
         <div className={clsx("flex w-full", actionsDirection === "row" ? "flex-row gap-3" : "flex-col gap-2")}>
           {closeButton && actionsDirection === "row" && (
             <DialogClose asChild>
@@ -47,12 +49,12 @@ export const Modal = ({
               </Button>
             </DialogClose>
           )}
-          {actions?.map((action) => (
+          {actions?.map(({ className, ...action }) => (
             <Button
-              className={clsx(actionsDirection === "row" ? "flex-1" : "w-full")}
+              className={clsx(actionsDirection === "row" ? "flex-1" : "w-full", className)}
               key={action.label}
-              onClick={action.onClick}
               variant="solid"
+              {...action}
             >
               {action.label}
             </Button>

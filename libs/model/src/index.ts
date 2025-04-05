@@ -15,9 +15,12 @@ export * from "./lib/server-nest/enum/status.enum";
 // Token
 export * from "./lib/server-nest/token/token.input";
 export * from "./lib/server-nest/token/token.model";
-export * from "./lib/server-nest/token/chain.input";
-export * from "./lib/server-nest/token/chain.model";
 export * from "./lib/server-nest/token/token-plugin.input";
+
+// Chain
+export * from "./lib/server-nest/chain/chain.input";
+export * from "./lib/server-nest/chain/chain.model";
+export * from "./lib/server-nest/chain/strategy.model";
 
 // User
 export * from "./lib/server-nest/user/user.input";

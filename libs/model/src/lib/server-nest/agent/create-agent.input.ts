@@ -1,5 +1,5 @@
-import { Field, InputType, Int } from "@nestjs/graphql";
-import { IsEthereumAddress, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { Field, InputType } from "@nestjs/graphql";
+import { IsEthereumAddress, IsNotEmpty, IsString } from "class-validator";
 
 @InputType()
 export class CreateAgentInput {
@@ -28,15 +28,20 @@ export class CreateAgentInput {
   @IsNotEmpty()
   vaultAddress!: string;
 
+  @Field(() => String, { nullable: false, description: "Agent token address" })
+  @IsEthereumAddress()
+  @IsNotEmpty()
+  tokenAddress!: string;
+
   @Field(() => String, { nullable: false, description: "Agent prompt" })
   @IsString()
   @IsNotEmpty()
   prompt!: string;
 
-  @Field(() => Int, { nullable: false, description: "Chain ID" })
-  @IsInt()
+  @Field(() => String, { nullable: false, description: "Chain ID" })
+  @IsString()
   @IsNotEmpty()
-  chainId!: number;
+  chainId!: string;
 
   // TODO: Add more fields
 }

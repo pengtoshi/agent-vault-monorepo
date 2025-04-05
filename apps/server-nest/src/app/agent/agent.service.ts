@@ -9,7 +9,7 @@ import { generateText } from "ai";
 import { Queue } from "bullmq";
 import Redis from "ioredis";
 import { createWalletClient, http } from "viem";
-import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { privateKeyToAccount } from "viem/accounts";
 import { ErrorMessage, VIEM_CHAINS } from "@libs/constants";
 import type { CreateAgentInput } from "@libs/model";
 import { PrismaService } from "@libs/nestjs-core";
@@ -18,6 +18,7 @@ import { getExecutionPrompt } from "./prompt";
 import { BlockchainService } from "../../common/blockchain/blockchain.service";
 import { agentVaultPlugin } from "../../common/plugin/vault/agent-vault.plugin";
 import { MarketService } from "../market/market.service";
+import { TokenService } from "../token/token.service";
 
 @Injectable()
 export class AgentService {
@@ -29,30 +30,30 @@ export class AgentService {
     private readonly prisma: PrismaService,
     private readonly marketService: MarketService,
     private readonly blockchainService: BlockchainService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async createAgent(createAgentInput: CreateAgentInput) {
-    const privateKey = generatePrivateKey();
-    const account = privateKeyToAccount(privateKey);
-
+    const { accountAddress, accountPrivateKey, ...agentInput } = createAgentInput;
     return this.prisma.$transaction(async (prismaTransaction: Prisma.TransactionClient) => {
+      await this.tokenService.createTokenTx(createAgentInput.tokenAddress, createAgentInput.chainId, prismaTransaction);
       const agentInfo = await prismaTransaction.agent.create({
         data: {
-          ...createAgentInput,
-          address: account.address,
+          ...agentInput,
+          address: accountAddress,
         },
       });
       await prismaTransaction.agentAccount.create({
         data: {
-          address: account.address,
-          privateKey,
+          address: accountAddress,
+          privateKey: accountPrivateKey,
         },
       });
       return agentInfo;
     });
   }
 
-  async getAgentOnChainTools(chainId: number, privateKey: string) {
+  async getAgentOnChainTools(chainId: string, privateKey: string) {
     const rpcUrl = this.blockchainService.getRpcUrl(chainId);
     const walletClient = createWalletClient({
       account: privateKeyToAccount(privateKey as `0x${string}`),
@@ -132,7 +133,7 @@ export class AgentService {
     return this.prisma.extended.message.findMany({ where: { agentId } });
   }
 
-  async resolveChain(chainId: number) {
+  async resolveChain(chainId: string) {
     if (!chainId) throw new Error(ErrorMessage.MSG_NOT_FOUND_CHAIN);
     return this.prisma.extended.chain.findUnique({ where: { chainId } });
   }
