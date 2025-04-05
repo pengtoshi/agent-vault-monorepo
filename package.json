@@ -208,6 +208,7 @@
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
     "next-themes": "^0.4.6",
+    "node-telegram-bot-api": "^0.66.0",
     "passport": "^0.6.0",
     "passport-headerapikey": "^1.2.2",
     "passport-jwt": "^4.0.1",

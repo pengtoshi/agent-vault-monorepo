@@ -168,6 +168,21 @@ model Strategy {
     @@unique([address, chainId])
 }
 
+model Subscriber {
+    /// 텔레그램 사용자 ID
+    telegramId   String   @id @unique
+    /// 텔레그램 활성 채팅 ID
+    chatId       String
+    /// 구독 상태
+    isActive     Boolean  @default(true)
+    /// 마지막 활동 시간
+    lastActiveAt DateTime @default(now())
+    /// 생성 일시
+    createdAt    DateTime @default(now()) @db.Timestamp(3)
+    /// 수정 일시
+    updatedAt    DateTime @updatedAt @db.Timestamp(3)
+}
+
 enum ROLE {
     USER
     ADMIN

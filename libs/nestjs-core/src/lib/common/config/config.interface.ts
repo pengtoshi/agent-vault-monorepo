@@ -7,6 +7,7 @@ export interface ConfigType {
   defiLlama: DefiLlamaConfig;
   openai: OpenAIConfig;
   network: NetworkConfig;
+  telegram: TelegramConfig;
 }
 
 export interface NestConfig {
@@ -54,4 +55,8 @@ export interface NetworkConfig {
   rpcUrl: {
     [chainId: number]: string;
   };
+}
+
+export interface TelegramConfig {
+  botToken: string;
 }

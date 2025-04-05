@@ -46,4 +46,7 @@ export const config = (): ConfigType => ({
       80002: process.env.POLYGON_AMOY_RPC_URL!,
     },
   },
+  telegram: {
+    botToken: process.env.TELEGRAM_BOT_TOKEN!,
+  },
 });

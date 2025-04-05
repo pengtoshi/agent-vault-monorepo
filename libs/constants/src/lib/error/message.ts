@@ -30,4 +30,7 @@ export const ErrorMessage = {
 
   // Blockchain
   MSG_NOT_FOUND_RPC_URL: "RPC URL not found.",
+
+  // Telegram
+  MSG_TELEGRAM_ID_NOT_FOUND: "Telegram ID not found.",
 };
