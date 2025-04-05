@@ -1,0 +1,40 @@
+name: Deploy affected projects
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup
+        name: Setup environment
+
+      - name: Set base commit hash
+        run: |
+          #!/usr/bin/env bash
+          commit=${{ github.event.before }}
+          if git branch --contains "$commit"; then
+            echo "No force push detected, continuing..."
+          else
+            # get the commit before this one
+            commit=$(git log --format="%H" -n 2 | tail -n 1)
+          fi
+          echo "BASE_COMMIT=$commit" >> $GITHUB_ENV
+
+      - name: Display base commit
+        run: echo "$BASE_COMMIT"
+
+      - name: Build affected
+        run: yarn build:all
+
+      - name: Deploy affected
+        run: ./tools/scripts/railway_trigger.sh
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
