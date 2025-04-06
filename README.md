@@ -86,3 +86,19 @@ yarn test:e2e-prepare
 # Test
 yarn test:all
 ```
+
+<br/>
+
+## 🤝 Team
+
+This project is submitted to **ETHTaipei 2025.**
+
+Members:
+
+[@pengtoshi](https://x.com/pengtoshi)
+<br/>
+Product engineer who loves to build products and code. Currently a university student and worked at seed-stage crypto startups.
+
+[@shubit](https://x.com/shubit)
+<br/>
+Growth leader with a strong track record in crypto and AI startups. Currently scaling Elfa AI and previously led growth at Echo Protocol and Particle Trade.

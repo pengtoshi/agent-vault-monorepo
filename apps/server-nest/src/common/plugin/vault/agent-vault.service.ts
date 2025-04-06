@@ -38,7 +38,6 @@ export class AgentVaultService {
     if (!strategyName) {
       throw new Error(ErrorMessage.MSG_STRATEGY_NOT_FOUND);
     }
-    console.log("currentStrategyName", strategyName);
     return strategyName;
   }
 
